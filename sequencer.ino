@@ -61,6 +61,7 @@ int change = 0;
 #define PAT_RANDOM 5
 
 int pattern = PAT_SINGLE;
+int old_pattern = PAT_SINGLE;
 int pat_dir = 1; // 1 when going forward, -1 when going backward
 int pat_repeat = 0;  // 0 for first of pair, 1 for second
 
@@ -114,6 +115,13 @@ void loop ()
   else if (val > 140) seq_length = 4;
   else if (val > 47) seq_length = 3;
   else seq_length = 2; // we don't allow seq_length == 1, come on, be reasonable
+
+  if (pattern != old_pattern)
+  {
+    pat_dir = 1;
+    pat_repeat = 0;
+  }
+  old_pattern = pattern;
 
   // step forward
   val = digitalRead (FORW);
