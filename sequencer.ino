@@ -2,7 +2,7 @@
 // Modifications to handle hardware changes, and
 // for preferred coding style
 
-// cc-by-sa Rich Holmes 2020
+// CC0 1.0 Rich Holmes 2020
 
 // Hardware configuration
 
