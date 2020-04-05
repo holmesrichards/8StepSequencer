@@ -18,7 +18,7 @@
 #define ZERO     11
 #define FORW     12
 #define BACK     13
-#define STOP     A0
+#define ROTARY   A0
 #define BUTTON1  10  // same as RESET (same action)
 #define BUTTON2  15
 #define BUTTON3  16
@@ -27,6 +27,8 @@
 #define BUTTON6  19
 #define BUTTON7  20
 #define BUTTON8  21
+
+#define GATEOFFTIME 1
 
 int steps[] = {STEP1, STEP2, STEP3, STEP4, STEP5, STEP6, STEP7, STEP8};
 int stepset = 0;
@@ -47,6 +49,20 @@ int seq_length = 8;
 
 int stepOn = 0;
 int old_stepOn = 0;
+
+int change = 0;
+
+// pattern control, patterns as suggested by CTorp
+
+#define PAT_SINGLE 1
+#define PAT_INCROT 2
+#define PAT_EXCROT 3
+#define PAT_DOUBLE 4
+#define PAT_RANDOM 5
+
+int pattern = PAT_SINGLE;
+int pat_dir = 1; // 1 when going forward, -1 when going backward
+int pat_repeat = 0;  // 0 for first of pair, 1 for second
 
 void setup ()
 {
@@ -75,45 +91,161 @@ void setup ()
 
 void loop ()
 {  
-  // Check the stop value to see how long to make the sequence
-
-  val = analogRead (STOP);
-  if (val > 938) seq_length = 8;
-  else if (val > 767) seq_length = 7;
-  else if (val > 597) seq_length = 6;
-  else if (val > 426) seq_length = 5;
-  else if (val > 256) seq_length = 4;
-  else if (val > 85) seq_length = 3;
-  else seq_length = 2; // we don't allow seq_length == 1, come on, be reasonable
-//  if (seq_length != old_seq_length)
-//  {
-//    Serial.print ("STOP ");
-//    Serial.println (seq_length);
-//  }
-//  old_seq_length = seq_length;
+  change = 0;
   
+  // Check the rotary switch
+
+  val = analogRead (ROTARY);
+  val = 1000; ////////////////// temporary
+
+  // Top 5 positions are various patterns; bottom 7 are different
+  // sequence lengths
+  pattern = PAT_SINGLE;
+  seq_length = 8;
+  if (val > 977) pattern = PAT_RANDOM;
+  else if (val > 884) pattern = PAT_DOUBLE;
+  else if (val > 791) pattern = PAT_EXCROT;
+  else if (val > 698) pattern = PAT_INCROT;
+  else if (val > 605) pattern = PAT_SINGLE;
+  else if (val > 512) seq_length = 8;
+  else if (val > 419) seq_length = 7;
+  else if (val > 326) seq_length = 6;
+  else if (val > 233) seq_length = 5;
+  else if (val > 140) seq_length = 4;
+  else if (val > 47) seq_length = 3;
+  else seq_length = 2; // we don't allow seq_length == 1, come on, be reasonable
+
   // step forward
   val = digitalRead (FORW);
   if ((val == HIGH) && (old_valForw == LOW))   
     {
-      stepOn = stepOn + 1;
-      if (stepOn > seq_length) stepOn = 1;
+      change = 1;
+      if (pattern == PAT_SINGLE)
+	{
+	  stepOn = stepOn + 1;
+	  if (stepOn > seq_length) stepOn = 1;
+	}
+      else if (pattern == PAT_INCROT)
+	{ 
+	  if (stepOn == 0)
+	    {
+	      stepOn = 1;
+	      pat_dir = 1;
+	    }
+	  else if (pat_dir == 1 && stepOn == seq_length)
+	    pat_dir = -1;
+	  else if (pat_dir == -1 && stepOn == 1)
+	    pat_dir = 1;
+	  else
+	    stepOn = stepOn + pat_dir;
+	}	  
+      else if (pattern == PAT_EXCROT)
+	{
+	  if (stepOn == 0)
+	    {
+	      stepOn = 1;
+	      pat_dir = 1;
+	    }
+	  else 
+	    {
+	      if (stepOn == seq_length)
+		pat_dir = -1;
+	      else if (stepOn == 1)
+		pat_dir = 1;
+	      stepOn = stepOn + pat_dir;
+	    }
+	}
+      else if (pattern == PAT_DOUBLE)
+	{
+	  if (stepOn == 0)
+	    {
+	      stepOn = 1;
+	      pat_repeat = 0;
+	    }
+	  else if (pat_repeat == 0)
+	    pat_repeat = 1;
+	  else
+	    {
+	      stepOn = stepOn + 1;
+	      if (stepOn > seq_length) stepOn = 1;
+	      pat_repeat = 0;
+	    }
+	}
+      else if (pattern == PAT_RANDOM)
+	{
+	  stepOn = random (1, seq_length+1);
+	}
     }
   old_valForw = val;
-
+  
   // step backward
   val = digitalRead (BACK);
   if ((val == HIGH) && (old_valBack == LOW))   
     {
-      stepOn = stepOn - 1;
-      if (stepOn <= 0) stepOn = seq_length;
+      change = 1;
+      if (pattern == PAT_SINGLE)
+	{
+	  stepOn = stepOn - 1;
+	  if (stepOn < 1) stepOn = seq_length;
+	}
+      else if (pattern == PAT_INCROT)
+	{
+	  if (stepOn == 0)
+	    {
+	      stepOn = seq_length;
+	      pat_dir = -1;
+	    }
+	  else if (pat_dir == 1 && stepOn == seq_length)
+	    pat_dir = -1;
+	  else if (pat_dir == -1 && stepOn == 1)
+	    pat_dir = 1;
+	  else
+	    stepOn = stepOn + pat_dir;
+	}	  
+      else if (pattern == PAT_EXCROT)
+	{
+	  if (stepOn == 0)
+	    {
+	      stepOn = seq_length;
+	      pat_dir = -1;
+	    }
+	  else 
+	    {
+	      if (stepOn == seq_length)
+		pat_dir = -1;
+	      else if (stepOn == 1)
+		pat_dir = 1;
+	      stepOn = stepOn + pat_dir;
+	    }
+	}
+      else if (pattern == PAT_DOUBLE)
+	{
+	  if (stepOn == 0)
+	    {
+	      stepOn = seq_length;
+	      pat_repeat = 0;
+	    }
+	  else if (pat_repeat == 0)
+	    pat_repeat = 1;
+	  else
+	    {
+	      stepOn = stepOn - 1;
+	      if (stepOn < 1) stepOn = seq_length;
+	      pat_repeat = 0;
+	    }
+	}
+      else if (pattern == PAT_RANDOM)
+	{
+	  stepOn = random (1, seq_length+1);
+	}
     }
   old_valBack = val;
-
+  
   // zero (mute)   
   val = digitalRead (ZERO);
   if ((val == HIGH) && (old_valZero == LOW))
   {
+      change = 1;
     stepOn = 0;
   }
   old_valZero = val;
@@ -122,6 +254,7 @@ void loop ()
   val = digitalRead (RESET);
   if ((val == HIGH) && (old_valReset == LOW))   
   {
+      change = 1;
     stepOn = 1;
   }
   old_valReset = val;
@@ -135,21 +268,27 @@ void loop ()
       val = digitalRead (buttons[ib-1]);
      if (val == HIGH && old_valButton[ib-1] == LOW)
       {
+      change = 1;
 	stepOn = ib;
       }
       old_valButton[ib-1] = val;
     }
 
-  // Now we've determined what to do, so do it
-
-  for (int ib = 0; ib < 8; ++ib)
+  // Now we've determined what to do, so if anything changed, do it
+  
+   if (change == 1)
     {
-      // Every step goes low except the step indicated by stepOn
-      // If stepOn is 0, all steps go low
-      if (ib == stepOn-1)
-	stepset = HIGH;
-      else
-	stepset = LOW;
-      digitalWrite (steps[ib], stepset);
+      // Turn off the on step, then turn on the new on step
+  
+      if (old_stepOn != 0)
+	{
+	  digitalWrite (steps[old_stepOn-1], LOW);
+	}
+      delay (GATEOFFTIME);
+      if (stepOn != 0)
+	{
+	  digitalWrite (steps[stepOn-1], HIGH);
+	}
+      old_stepOn = stepOn;
     }
 }
