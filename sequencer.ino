@@ -4,10 +4,10 @@
 
 // CC0 1.0 Rich Holmes 2020
 
-// Hardware configuration
-
 #define DEBUGPATTERNS true   // true to step through patterns
 #define NDBG 32 // number of loops per pattern when debugging
+
+// Hardware configuration
 
 #define STEP1     2
 #define STEP2     3
@@ -56,17 +56,16 @@ int old_seq_length = 0;
 int stepOn = 0;
 int old_stepOn = 0;
 
-bool doNewGate = false;
-
-bool stepForward = true;
+bool doNewGate = false;  // true if a new gate is to be generated
+bool stepForward = true; // true if a forward or backward step is to be taken
 
 // pattern control, patterns as suggested by CTorp
 
-#define PAT_SINGLE 1
-#define PAT_INCROT 2
-#define PAT_EXCROT 3
-#define PAT_DOUBLE 4
-#define PAT_RANDOM 5
+#define PAT_SINGLE 1  // single (1-2-3-4-5-6-7-8-1-2-3-4-5-6-7-8-)
+#define PAT_INCROT 2  // inclusive rotate (1-2-3-4-5-6-7-8-8-7-6-5-4-3-2-1-)
+#define PAT_EXCROT 3  // exclusive rotate (1-2-3-4-5-6-7-8-7-6-5-4-3-2-)
+#define PAT_DOUBLE 4  // double (1-1-2-2-3-3-4-4-5-5-6-6-7-7-8-8-)
+#define PAT_RANDOM 5  // random
 
 int pattern = PAT_SINGLE;
 int old_pattern = PAT_SINGLE;
@@ -102,8 +101,6 @@ void loop ()
 {  
   // Check the rotary switch
     
-  val = analogRead (ROTARY);
-
   // Switch selects sequence length (# of stages used) and pattern
   //   
   // Position   Length  Pattern
@@ -121,6 +118,8 @@ void loop ()
 
   if (DEBUGPATTERNS)
     {
+      // Cycle through all patterns with seq_length 8 and
+      // all sequence lengths with pattern PAT_SIMPLE
       if (changepattern)
 	{
   	  pattern = idbg / NDBG + 1;
@@ -145,6 +144,7 @@ void loop ()
     }
   else
     {
+      val = analogRead (ROTARY);
       pattern = PAT_SINGLE;
       seq_length = 8;
       if (val > 973) pattern = PAT_RANDOM;
@@ -162,6 +162,8 @@ void loop ()
   
   old_pattern = pattern;
   old_seq_length = seq_length;
+
+  // Check the inputs/momentary switches
   
   doNewGate = false;
 
@@ -191,6 +193,11 @@ void loop ()
   }
 
   // Execute patterns for either forward or backward step
+  // Note that the following code allows for any pattern to be used with any
+  // sequence length, though the current hardware and the code to read it only
+  // permit PAT_SIMPLE with sequence length 2 through 8, or other patterns
+  // with sequence length 8.
+  
   if (doNewGate)
     if (pattern == PAT_RANDOM)
       stepOn = random (1, seq_length+1);
