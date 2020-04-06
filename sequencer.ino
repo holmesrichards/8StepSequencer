@@ -6,6 +6,9 @@
 
 // Hardware configuration
 
+#define DEBUGPATTERNS true   // true to step through patterns
+#define NDBG 32 // number of loops per pattern when debugging
+
 #define STEP1     2
 #define STEP2     3
 #define STEP3     4
@@ -30,6 +33,9 @@
 
 #define GATEOFFTIME 1
 
+int idbg = 0;
+bool changepattern = true;
+
 int steps[] = {STEP1, STEP2, STEP3, STEP4, STEP5, STEP6, STEP7, STEP8};
 int stepset = 0;
 int buttons[] = {BUTTON1, BUTTON2, BUTTON3, BUTTON4, BUTTON5, BUTTON6, BUTTON7, BUTTON8};
@@ -43,7 +49,7 @@ int old_valBack = 0;
 int old_valButton[] = {0, 0, 0, 0, 0, 0, 0, 0};
 
 int seq_length = 8;
-// int old_seq_length = 0;
+int old_seq_length = 0;
 
 // stepOn is the step to turn on next, or 0 to turn off all steps
 
@@ -51,6 +57,8 @@ int stepOn = 0;
 int old_stepOn = 0;
 
 bool doNewGate = false;
+
+bool stepForward = true;
 
 // pattern control, patterns as suggested by CTorp
 
@@ -62,7 +70,7 @@ bool doNewGate = false;
 
 int pattern = PAT_SINGLE;
 int old_pattern = PAT_SINGLE;
-int pat_dir = 1; // 1 when going forward, -1 when going backward
+int pat_dir = 1; // 1 when going forward within pattern, -1 when going backward
 bool pat_first = true;  // true for first of pair, false for second
 
 void setup ()
@@ -92,12 +100,9 @@ void setup ()
 
 void loop ()
 {  
-  doNewGate = false;
-  
   // Check the rotary switch
     
   val = analogRead (ROTARY);
-  val = 1000; ////////////////// temporary
 
   // Switch selects sequence length (# of stages used) and pattern
   //   
@@ -114,66 +119,58 @@ void loop ()
   // 10          8       Double
   // 11          8       Random
 
-  pattern = PAT_SINGLE;
-  seq_length = 8;
-  if (val > 973) pattern = PAT_RANDOM;
-  else if (val > 870) pattern = PAT_DOUBLE;
-  else if (val > 768) pattern = PAT_EXCROT;
-  else if (val > 666) pattern = PAT_INCROT;
-  else if (val > 563) seq_length = 8;
-  else if (val > 461) seq_length = 7;
-  else if (val > 358) seq_length = 6;
-  else if (val > 256) seq_length = 5;
-  else if (val > 154) seq_length = 4;
-  else if (val > 51) seq_length = 3;
-  else seq_length = 2; // we don't allow seq_length == 1, come on, be reasonable
-
+  if (DEBUGPATTERNS)
+    {
+      if (changepattern)
+	{
+  	  pattern = idbg / NDBG + 1;
+	  if (pattern > PAT_RANDOM)
+	    {
+	      pattern = PAT_SINGLE;
+	      if (seq_length > 2)
+		seq_length = seq_length - 1;
+	      else
+		{
+		  idbg = 0;
+		  seq_length = 8;
+		}
+	    }
+	  Serial.print (idbg);
+	  Serial.print (" ");
+	  Serial.print (pattern);
+	  Serial.print (" ");
+	  Serial.println (seq_length);
+	  changepattern = false;
+	}
+    }
+  else
+    {
+      pattern = PAT_SINGLE;
+      seq_length = 8;
+      if (val > 973) pattern = PAT_RANDOM;
+      else if (val > 870) pattern = PAT_DOUBLE;
+      else if (val > 768) pattern = PAT_EXCROT;
+      else if (val > 666) pattern = PAT_INCROT;
+      else if (val > 563) seq_length = 8;
+      else if (val > 461) seq_length = 7;
+      else if (val > 358) seq_length = 6;
+      else if (val > 256) seq_length = 5;
+      else if (val > 154) seq_length = 4;
+      else if (val > 51) seq_length = 3;
+      else seq_length = 2; // we don't allow seq_length == 1, come on, be reasonable
+    }
+  
   old_pattern = pattern;
+  old_seq_length = seq_length;
+  
+  doNewGate = false;
 
   // step forward
   val = digitalRead (FORW);
-  if ((val == HIGH) && (old_valForw == LOW))   
+  if ((val == HIGH) && (old_valForw == LOW))
     {
       doNewGate = true;
-      if (pattern == PAT_RANDOM)
-	stepOn = random (1, seq_length+1);
-      else if (stepOn == 0)
-	{
-	  stepOn = 1;
-	  pat_dir = 1;
-	  pat_first = true;
-	}
-      else if (pattern == PAT_SINGLE)
-	{
-	  stepOn = stepOn + 1;
-	  if (stepOn > seq_length) stepOn = 1;
-	}
-      else if (pattern == PAT_INCROT)
-	{ 
-	  if (pat_dir == 1 && stepOn == seq_length)
-	    pat_dir = -1;
-	  else if (pat_dir == -1 && stepOn == 1)
-	    pat_dir = 1;
-	  else
-	    stepOn = stepOn + pat_dir;
-	}	  
-      else if (pattern == PAT_EXCROT)
-	{
-	  if (stepOn == seq_length)
-	    pat_dir = -1;
-	  else if (stepOn == 1)
-	    pat_dir = 1;
-	  stepOn = stepOn + pat_dir;
-	}
-      else if (pattern == PAT_DOUBLE)
-	{
-	  if (not pat_first)
-	    {
-	      stepOn = stepOn + 1;
-	      if (stepOn > seq_length) stepOn = 1;
-	    }
-	  pat_first = not pat_first;
-	}
+      stepForward = true;
     }
   old_valForw = val;
   
@@ -182,48 +179,68 @@ void loop ()
   if ((val == HIGH) && (old_valBack == LOW))   
     {
       doNewGate = true;
-      if (pattern == PAT_RANDOM)
-	stepOn = random (1, seq_length+1);
-      else if (stepOn == 0)
+      stepForward = false;
+    }
+  old_valBack = val;
+
+  if (DEBUGPATTERNS && doNewGate)
+  {
+    idbg = idbg+1;
+    if (idbg % NDBG == 0)
+      changepattern = true;
+  }
+
+  // Execute patterns for either forward or backward step
+  if (doNewGate)
+    if (pattern == PAT_RANDOM)
+      stepOn = random (1, seq_length+1);
+    else if (stepOn == 0)
+      {
+	stepOn = 1;
+	pat_first = true;
+      }
+    else if (pattern == PAT_SINGLE)
+      if (stepForward)
 	{
-	  stepOn = seq_length;
-	  pat_dir = -1;
-	  pat_first = true;
+	  stepOn = stepOn + 1;
+	  if (stepOn > seq_length) stepOn = 1;
 	}
-      else if (pattern == PAT_SINGLE)
+      else
 	{
 	  stepOn = stepOn - 1;
 	  if (stepOn < 1) stepOn = seq_length;
 	}
-      else if (pattern == PAT_INCROT)
-	{ 
-	  if (pat_dir == 1 && stepOn == seq_length)
-	    pat_dir = -1;
-	  else if (pat_dir == -1 && stepOn == 1)
-	    pat_dir = 1;
+    else if (pattern == PAT_INCROT)
+      if (pat_dir == 1 && stepOn == seq_length)
+	pat_dir = -1;
+      else if (pat_dir == -1 && stepOn == 1)
+	pat_dir = 1;
+      else
+	stepOn = stepOn + pat_dir;
+    else if (pattern == PAT_EXCROT)
+      {
+	if (stepOn == seq_length)
+	  pat_dir = -1;
+	else if (stepOn == 1)
+	  pat_dir = 1;
+	stepOn = stepOn + pat_dir;
+      }
+    else if (pattern == PAT_DOUBLE)
+      {
+	if (not pat_first)
+	  if (stepForward)
+	    {
+	      stepOn = stepOn + 1;
+	      if (stepOn > seq_length) stepOn = 1;
+	    }
 	  else
-	    stepOn = stepOn + pat_dir;
-	}	  
-      else if (pattern == PAT_EXCROT)
-	{
-	  if (stepOn == seq_length)
-	    pat_dir = -1;
-	  else if (stepOn == 1)
-	    pat_dir = 1;
-	  stepOn = stepOn + pat_dir;
-	}
-      else if (pattern == PAT_DOUBLE)
-	{
-	  if (not pat_first)
 	    {
 	      stepOn = stepOn - 1;
 	      if (stepOn < 1) stepOn = seq_length;
 	    }
-	  pat_first = not pat_first;
-	}
-    }
-  old_valBack = val;
-  
+	pat_first = not pat_first;
+      }  
+
   // zero (mute)   
   val = digitalRead (ZERO);
   if ((val == HIGH) && (old_valZero == LOW))
@@ -243,8 +260,8 @@ void loop ()
   old_valReset = val;
   
   // check the buttons, and actually we can start with button 2
-  // because button 1 and reset produce the same signal
-  // and we already checked that
+  // because button 1 and reset produce the same signal and we already
+  // checked that
   
   for (int ib = 2; ib <= 8; ++ib)
     {
