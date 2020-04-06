@@ -99,21 +99,33 @@ void loop ()
   val = analogRead (ROTARY);
   val = 1000; ////////////////// temporary
 
-  // Top 5 positions are various patterns; bottom 7 are different
-  // sequence lengths
+  // Switch selects sequence length (# of stages used) and pattern
+  //   
+  // Position   Length  Pattern
+  // 1          2       Single
+  // 2          3       Single
+  // 3          4       Single
+  // 4          5       Single
+  // 5          6       Single
+  // 6          7       Single
+  // 7          8       Single
+  // 8          8       Inclusive rotation
+  // 8          8       Exclusive rotation
+  // 8          8       Double
+  // 8          8       Random
+
   pattern = PAT_SINGLE;
   seq_length = 8;
-  if (val > 977) pattern = PAT_RANDOM;
-  else if (val > 884) pattern = PAT_DOUBLE;
-  else if (val > 791) pattern = PAT_EXCROT;
-  else if (val > 698) pattern = PAT_INCROT;
-  else if (val > 605) pattern = PAT_SINGLE;
-  else if (val > 512) seq_length = 8;
-  else if (val > 419) seq_length = 7;
-  else if (val > 326) seq_length = 6;
-  else if (val > 233) seq_length = 5;
-  else if (val > 140) seq_length = 4;
-  else if (val > 47) seq_length = 3;
+  if (val > 973) pattern = PAT_RANDOM;
+  else if (val > 870) pattern = PAT_DOUBLE;
+  else if (val > 768) pattern = PAT_EXCROT;
+  else if (val > 666) pattern = PAT_INCROT;
+  else if (val > 563) seq_length = 8;
+  else if (val > 461) seq_length = 7;
+  else if (val > 358) seq_length = 6;
+  else if (val > 256) seq_length = 5;
+  else if (val > 154) seq_length = 4;
+  else if (val > 51) seq_length = 3;
   else seq_length = 2; // we don't allow seq_length == 1, come on, be reasonable
 
   old_pattern = pattern;

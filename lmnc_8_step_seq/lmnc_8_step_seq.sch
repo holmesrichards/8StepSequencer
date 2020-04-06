@@ -1181,7 +1181,7 @@ Wire Wire Line
 	7750 1475 7750 1850
 Wire Wire Line
 	8750 1850 8750 1475
-Text GLabel 2675 7425 2    50   Input ~ 0
+Text GLabel 2975 7325 2    50   Input ~ 0
 VCC
 Wire Wire Line
 	3800 5175 3950 5175
@@ -1271,7 +1271,6 @@ Wire Wire Line
 	3275 6875 3275 6975
 Wire Wire Line
 	2675 6875 3275 6875
-Connection ~ 2975 6975
 $Comp
 L Device:R R?
 U 1 1 5E9018E8
@@ -1284,22 +1283,9 @@ F 3 "~" H 3125 6975 50  0001 C CNN
 	0    1    -1   0   
 $EndComp
 Wire Wire Line
-	2975 6975 2975 7075
-Wire Wire Line
 	2675 6975 2975 6975
-$Comp
-L Device:R R?
-U 1 1 5E9018F0
-P 2825 7075
-F 0 "R?" V 2618 7075 50  0000 C CNN
-F 1 "1k" V 2709 7075 50  0000 C CNN
-F 2 "" V 2755 7075 50  0001 C CNN
-F 3 "~" H 2825 7075 50  0001 C CNN
-	1    2825 7075
-	0    1    -1   0   
-$EndComp
 Wire Wire Line
-	2675 7075 2675 7425
+	2975 6975 2975 7325
 Wire Wire Line
 	4475 6375 2675 6375
 Wire Wire Line
@@ -1316,4 +1302,6 @@ Wire Wire Line
 	4475 6575 4475 6375
 Connection ~ 4475 6375
 Connection ~ 5975 5975
+Connection ~ 2975 6975
+NoConn ~ 2675 7075
 $EndSCHEMATC
