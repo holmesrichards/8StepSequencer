@@ -4,9 +4,6 @@
 
 // CC0 1.0 Rich Holmes 2020
 
-#define DEBUGPATTERNS true   // true to step through patterns
-#define NDBG 32 // number of loops per pattern when debugging
-
 // Hardware configuration
 
 #define STEP1     2
@@ -33,9 +30,6 @@
 
 #define GATEOFFTIME 1
 
-int idbg = 0;
-bool changepattern = true;
-
 int steps[] = {STEP1, STEP2, STEP3, STEP4, STEP5, STEP6, STEP7, STEP8};
 int stepset = 0;
 int buttons[] = {BUTTON1, BUTTON2, BUTTON3, BUTTON4, BUTTON5, BUTTON6, BUTTON7, BUTTON8};
@@ -49,7 +43,6 @@ int old_valBack = 0;
 int old_valButton[] = {0, 0, 0, 0, 0, 0, 0, 0};
 
 int seq_length = 8;
-int old_seq_length = 0;
 
 // stepOn is the step to turn on next, or 0 to turn off all steps
 
@@ -116,52 +109,22 @@ void loop ()
   // 10          8       Double
   // 11          8       Random
 
-  if (DEBUGPATTERNS)
-    {
-      // Cycle through all patterns with seq_length 8 and
-      // all sequence lengths with pattern PAT_SIMPLE
-      if (changepattern)
-	{
-  	  pattern = idbg / NDBG + 1;
-	  if (pattern > PAT_RANDOM)
-	    {
-	      pattern = PAT_SINGLE;
-	      if (seq_length > 2)
-		seq_length = seq_length - 1;
-	      else
-		{
-		  idbg = 0;
-		  seq_length = 8;
-		}
-	    }
-	  Serial.print (idbg);
-	  Serial.print (" ");
-	  Serial.print (pattern);
-	  Serial.print (" ");
-	  Serial.println (seq_length);
-	  changepattern = false;
-	}
-    }
-  else
-    {
-      val = analogRead (ROTARY);
-      pattern = PAT_SINGLE;
-      seq_length = 8;
-      if (val > 973) pattern = PAT_RANDOM;
-      else if (val > 870) pattern = PAT_DOUBLE;
-      else if (val > 768) pattern = PAT_EXCROT;
-      else if (val > 666) pattern = PAT_INCROT;
-      else if (val > 563) seq_length = 8;
-      else if (val > 461) seq_length = 7;
-      else if (val > 358) seq_length = 6;
-      else if (val > 256) seq_length = 5;
-      else if (val > 154) seq_length = 4;
-      else if (val > 51) seq_length = 3;
-      else seq_length = 2; // we don't allow seq_length == 1, come on, be reasonable
-    }
+  val = analogRead (ROTARY);
+  pattern = PAT_SINGLE;
+  seq_length = 8;
+  if (val > 973) pattern = PAT_RANDOM;
+  else if (val > 870) pattern = PAT_DOUBLE;
+  else if (val > 768) pattern = PAT_EXCROT;
+  else if (val > 666) pattern = PAT_INCROT;
+  else if (val > 563) seq_length = 8;
+  else if (val > 461) seq_length = 7;
+  else if (val > 358) seq_length = 6;
+  else if (val > 256) seq_length = 5;
+  else if (val > 154) seq_length = 4;
+  else if (val > 51) seq_length = 3;
+  else seq_length = 2; // we don't allow seq_length == 1, come on, be reasonable
   
   old_pattern = pattern;
-  old_seq_length = seq_length;
 
   // Check the inputs/momentary switches
   
@@ -184,13 +147,6 @@ void loop ()
       stepForward = false;
     }
   old_valBack = val;
-
-  if (DEBUGPATTERNS && doNewGate)
-  {
-    idbg = idbg+1;
-    if (idbg % NDBG == 0)
-      changepattern = true;
-  }
 
   // Execute patterns for either forward or backward step
   // Note that the following code allows for any pattern to be used with any
