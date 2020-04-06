@@ -102,17 +102,17 @@ void loop ()
   // Switch selects sequence length (# of stages used) and pattern
   //   
   // Position   Length  Pattern
-  // 1          2       Single
-  // 2          3       Single
-  // 3          4       Single
-  // 4          5       Single
-  // 5          6       Single
-  // 6          7       Single
-  // 7          8       Single
-  // 8          8       Inclusive rotation
-  // 8          8       Exclusive rotation
-  // 8          8       Double
-  // 8          8       Random
+  //  1          2       Single
+  //  2          3       Single
+  //  3          4       Single
+  //  4          5       Single
+  //  5          6       Single
+  //  6          7       Single
+  //  7          8       Single
+  //  8          8       Inclusive rotation
+  //  9          8       Exclusive rotation
+  // 10          8       Double
+  // 11          8       Random
 
   pattern = PAT_SINGLE;
   seq_length = 8;
