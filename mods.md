@@ -1,4 +1,4 @@
-#LMNC sequencer mods:
+# LMNC sequencer mods:
 
 LMNC version has external L78L05_TO92 regulator connected to VIN, which is wrong… either 12V to VIN or external regulator to VCC. Internal regulator probably sufficient? But external is cheap and easy.
 
