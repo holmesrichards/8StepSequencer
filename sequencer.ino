@@ -50,7 +50,7 @@ int seq_length = 8;
 int stepOn = 0;
 int old_stepOn = 0;
 
-int change = 0;
+bool doNewGate = false;
 
 // pattern control, patterns as suggested by CTorp
 
@@ -63,7 +63,7 @@ int change = 0;
 int pattern = PAT_SINGLE;
 int old_pattern = PAT_SINGLE;
 int pat_dir = 1; // 1 when going forward, -1 when going backward
-int pat_repeat = 0;  // 0 for first of pair, 1 for second
+bool pat_first = true;  // true for first of pair, false for second
 
 void setup ()
 {
@@ -92,10 +92,10 @@ void setup ()
 
 void loop ()
 {  
-  change = 0;
+  doNewGate = false;
   
   // Check the rotary switch
-
+    
   val = analogRead (ROTARY);
   val = 1000; ////////////////// temporary
 
@@ -116,31 +116,29 @@ void loop ()
   else if (val > 47) seq_length = 3;
   else seq_length = 2; // we don't allow seq_length == 1, come on, be reasonable
 
-  if (pattern != old_pattern)
-  {
-    pat_dir = 1;
-    pat_repeat = 0;
-  }
   old_pattern = pattern;
 
   // step forward
   val = digitalRead (FORW);
   if ((val == HIGH) && (old_valForw == LOW))   
     {
-      change = 1;
-      if (pattern == PAT_SINGLE)
+      doNewGate = true;
+      if (pattern == PAT_RANDOM)
+	stepOn = random (1, seq_length+1);
+      else if (stepOn == 0)
+	{
+	  stepOn = 1;
+	  pat_dir = 1;
+	  pat_first = true;
+	}
+      else if (pattern == PAT_SINGLE)
 	{
 	  stepOn = stepOn + 1;
 	  if (stepOn > seq_length) stepOn = 1;
 	}
       else if (pattern == PAT_INCROT)
 	{ 
-	  if (stepOn == 0)
-	    {
-	      stepOn = 1;
-	      pat_dir = 1;
-	    }
-	  else if (pat_dir == 1 && stepOn == seq_length)
+	  if (pat_dir == 1 && stepOn == seq_length)
 	    pat_dir = -1;
 	  else if (pat_dir == -1 && stepOn == 1)
 	    pat_dir = 1;
@@ -149,39 +147,20 @@ void loop ()
 	}	  
       else if (pattern == PAT_EXCROT)
 	{
-	  if (stepOn == 0)
-	    {
-	      stepOn = 1;
-	      pat_dir = 1;
-	    }
-	  else 
-	    {
-	      if (stepOn == seq_length)
-		pat_dir = -1;
-	      else if (stepOn == 1)
-		pat_dir = 1;
-	      stepOn = stepOn + pat_dir;
-	    }
+	  if (stepOn == seq_length)
+	    pat_dir = -1;
+	  else if (stepOn == 1)
+	    pat_dir = 1;
+	  stepOn = stepOn + pat_dir;
 	}
       else if (pattern == PAT_DOUBLE)
 	{
-	  if (stepOn == 0)
-	    {
-	      stepOn = 1;
-	      pat_repeat = 0;
-	    }
-	  else if (pat_repeat == 0)
-	    pat_repeat = 1;
-	  else
+	  if (not pat_first)
 	    {
 	      stepOn = stepOn + 1;
 	      if (stepOn > seq_length) stepOn = 1;
-	      pat_repeat = 0;
 	    }
-	}
-      else if (pattern == PAT_RANDOM)
-	{
-	  stepOn = random (1, seq_length+1);
+	  pat_first = not pat_first;
 	}
     }
   old_valForw = val;
@@ -190,20 +169,23 @@ void loop ()
   val = digitalRead (BACK);
   if ((val == HIGH) && (old_valBack == LOW))   
     {
-      change = 1;
-      if (pattern == PAT_SINGLE)
+      doNewGate = true;
+      if (pattern == PAT_RANDOM)
+	stepOn = random (1, seq_length+1);
+      else if (stepOn == 0)
+	{
+	  stepOn = seq_length;
+	  pat_dir = -1;
+	  pat_first = true;
+	}
+      else if (pattern == PAT_SINGLE)
 	{
 	  stepOn = stepOn - 1;
 	  if (stepOn < 1) stepOn = seq_length;
 	}
       else if (pattern == PAT_INCROT)
-	{
-	  if (stepOn == 0)
-	    {
-	      stepOn = seq_length;
-	      pat_dir = -1;
-	    }
-	  else if (pat_dir == 1 && stepOn == seq_length)
+	{ 
+	  if (pat_dir == 1 && stepOn == seq_length)
 	    pat_dir = -1;
 	  else if (pat_dir == -1 && stepOn == 1)
 	    pat_dir = 1;
@@ -212,39 +194,20 @@ void loop ()
 	}	  
       else if (pattern == PAT_EXCROT)
 	{
-	  if (stepOn == 0)
-	    {
-	      stepOn = seq_length;
-	      pat_dir = -1;
-	    }
-	  else 
-	    {
-	      if (stepOn == seq_length)
-		pat_dir = -1;
-	      else if (stepOn == 1)
-		pat_dir = 1;
-	      stepOn = stepOn + pat_dir;
-	    }
+	  if (stepOn == seq_length)
+	    pat_dir = -1;
+	  else if (stepOn == 1)
+	    pat_dir = 1;
+	  stepOn = stepOn + pat_dir;
 	}
       else if (pattern == PAT_DOUBLE)
 	{
-	  if (stepOn == 0)
-	    {
-	      stepOn = seq_length;
-	      pat_repeat = 0;
-	    }
-	  else if (pat_repeat == 0)
-	    pat_repeat = 1;
-	  else
+	  if (not pat_first)
 	    {
 	      stepOn = stepOn - 1;
 	      if (stepOn < 1) stepOn = seq_length;
-	      pat_repeat = 0;
 	    }
-	}
-      else if (pattern == PAT_RANDOM)
-	{
-	  stepOn = random (1, seq_length+1);
+	  pat_first = not pat_first;
 	}
     }
   old_valBack = val;
@@ -252,21 +215,21 @@ void loop ()
   // zero (mute)   
   val = digitalRead (ZERO);
   if ((val == HIGH) && (old_valZero == LOW))
-  {
-      change = 1;
-    stepOn = 0;
-  }
+    {
+      doNewGate = true;
+      stepOn = 0;
+    }
   old_valZero = val;
-
+  
   // reset (go back to step 1)
   val = digitalRead (RESET);
   if ((val == HIGH) && (old_valReset == LOW))   
-  {
-      change = 1;
-    stepOn = 1;
-  }
+    {
+      doNewGate = true;
+      stepOn = 1;
+    }
   old_valReset = val;
-
+  
   // check the buttons, and actually we can start with button 2
   // because button 1 and reset produce the same signal
   // and we already checked that
@@ -274,29 +237,25 @@ void loop ()
   for (int ib = 2; ib <= 8; ++ib)
     {
       val = digitalRead (buttons[ib-1]);
-     if (val == HIGH && old_valButton[ib-1] == LOW)
-      {
-      change = 1;
-	stepOn = ib;
-      }
+      if (val == HIGH && old_valButton[ib-1] == LOW)
+	{
+	  doNewGate = true;
+	  stepOn = ib;
+	}
       old_valButton[ib-1] = val;
     }
-
-  // Now we've determined what to do, so if anything changed, do it
   
-   if (change == 1)
+  // Now we've determined what to do, so if we need a new gate, do it
+  
+  if (doNewGate)
     {
       // Turn off the on step, then turn on the new on step
-  
+      
       if (old_stepOn != 0)
-	{
-	  digitalWrite (steps[old_stepOn-1], LOW);
-	}
+	digitalWrite (steps[old_stepOn-1], LOW);
       delay (GATEOFFTIME);
       if (stepOn != 0)
-	{
-	  digitalWrite (steps[stepOn-1], HIGH);
-	}
+	digitalWrite (steps[stepOn-1], HIGH);
       old_stepOn = stepOn;
     }
 }
