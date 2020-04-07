@@ -85,7 +85,7 @@ void setup ()
   pinMode (BUTTON3, INPUT);
   pinMode (BUTTON4, INPUT);
   pinMode (BUTTON5, INPUT);
-  pinMode (BUTTON6, INPUT);
+  pinMode (BUTTON6, INPUT);  // BUTTON7 and BUTTON8 will be read as analog
 }
 
 void loop ()
@@ -234,6 +234,9 @@ void loop ()
 	}
       old_valButton[ib-1] = val;
     }
+
+  // Pins A6 and A7 cannot be read as digital on the Nano so read
+  // as analog and expect > 1000 when button pressed
   
   for (int ib = 7; ib <= 8; ++ib)
     {
