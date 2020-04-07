@@ -25,8 +25,8 @@
 #define BUTTON4  17
 #define BUTTON5  18
 #define BUTTON6  19
-#define BUTTON7  20
-#define BUTTON8  21
+#define BUTTON7  A6  // must be read as analog
+#define BUTTON8  A7
 
 #define GATEOFFTIME 1
 
@@ -86,8 +86,6 @@ void setup ()
   pinMode (BUTTON4, INPUT);
   pinMode (BUTTON5, INPUT);
   pinMode (BUTTON6, INPUT);
-  pinMode (BUTTON7, INPUT);
-  pinMode (BUTTON8, INPUT);
 }
 
 void loop ()
@@ -226,10 +224,21 @@ void loop ()
   // because button 1 and reset produce the same signal and we already
   // checked that
   
-  for (int ib = 2; ib <= 8; ++ib)
+  for (int ib = 2; ib <= 6; ++ib)
     {
       val = digitalRead (buttons[ib-1]);
       if (val == HIGH && old_valButton[ib-1] == LOW)
+	{
+	  doNewGate = true;
+	  stepOn = ib;
+	}
+      old_valButton[ib-1] = val;
+    }
+  
+  for (int ib = 7; ib <= 8; ++ib)
+    {
+      val = analogRead (buttons[ib-1]);
+      if (val > 1000 && old_valButton[ib-1] < 1000)
 	{
 	  doNewGate = true;
 	  stepOn = ib;
