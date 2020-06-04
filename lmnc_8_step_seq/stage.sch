@@ -3,56 +3,16 @@ EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 5 9
-Title ""
-Date ""
+Sheet 9 9
+Title "8 Step Keyboard Sequencer"
+Date "2020-06-02"
 Rev ""
-Comp ""
-Comment1 ""
+Comp "Rich Holmes / Analog Output"
+Comment1 "Adapted from LMNC"
 Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
-$Comp
-L Device:LED D?
-U 1 1 5E9C968A
-P 2350 1950
-AR Path="/5E9C968A" Ref="D?"  Part="1" 
-AR Path="/5E9C0ACA/5E9C968A" Ref="D9"  Part="1" 
-AR Path="/5EA216A1/5E9C968A" Ref="D14"  Part="1" 
-AR Path="/5EA266C5/5E9C968A" Ref="D19"  Part="1" 
-AR Path="/5EA27AAF/5E9C968A" Ref="D24"  Part="1" 
-AR Path="/5E966E88/5E9C968A" Ref="D29"  Part="1" 
-AR Path="/5E96711E/5E9C968A" Ref="D34"  Part="1" 
-AR Path="/5E967389/5E9C968A" Ref="D39"  Part="1" 
-AR Path="/5E967587/5E9C968A" Ref="D44"  Part="1" 
-F 0 "D24" V 2297 2028 50  0000 L CNN
-F 1 "LED" V 2388 2028 50  0000 L CNN
-F 2 "LED_THT:LED_D5.0mm" H 2350 1950 50  0001 C CNN
-F 3 "~" H 2350 1950 50  0001 C CNN
-	1    2350 1950
-	0    1    1    0   
-$EndComp
-$Comp
-L Device:R R?
-U 1 1 5E9C9690
-P 2350 2250
-AR Path="/5E9C9690" Ref="R?"  Part="1" 
-AR Path="/5E9C0ACA/5E9C9690" Ref="R14"  Part="1" 
-AR Path="/5EA216A1/5E9C9690" Ref="R17"  Part="1" 
-AR Path="/5EA266C5/5E9C9690" Ref="R20"  Part="1" 
-AR Path="/5EA27AAF/5E9C9690" Ref="R23"  Part="1" 
-AR Path="/5E966E88/5E9C9690" Ref="R26"  Part="1" 
-AR Path="/5E96711E/5E9C9690" Ref="R29"  Part="1" 
-AR Path="/5E967389/5E9C9690" Ref="R32"  Part="1" 
-AR Path="/5E967587/5E9C9690" Ref="R35"  Part="1" 
-F 0 "R23" H 2420 2296 50  0000 L CNN
-F 1 "1k" H 2420 2205 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical" V 2280 2250 50  0001 C CNN
-F 3 "~" H 2350 2250 50  0001 C CNN
-	1    2350 2250
-	1    0    0    -1  
-$EndComp
 $Comp
 L Device:R_POT RV?
 U 1 1 5E9C9696
@@ -66,32 +26,13 @@ AR Path="/5E966E88/5E9C9696" Ref="RV9"  Part="1"
 AR Path="/5E96711E/5E9C9696" Ref="RV11"  Part="1" 
 AR Path="/5E967389/5E9C9696" Ref="RV13"  Part="1" 
 AR Path="/5E967587/5E9C9696" Ref="RV15"  Part="1" 
-F 0 "RV7" V 2943 2400 50  0000 C CNN
+AR Path="/5ED817BE/5E9C9696" Ref="RV17"  Part="1" 
+F 0 "RV1" V 2943 2400 50  0000 C CNN
 F 1 "R_POT" V 3034 2400 50  0000 C CNN
 F 2 "Potentiometer_THT:Potentiometer_Alps_RK163_Single_Horizontal" H 3150 2400 50  0001 C CNN
 F 3 "~" H 3150 2400 50  0001 C CNN
 	1    3150 2400
 	0    -1   1    0   
-$EndComp
-$Comp
-L power:GND #PWR?
-U 1 1 5E9C969C
-P 2350 1800
-AR Path="/5E9C969C" Ref="#PWR?"  Part="1" 
-AR Path="/5E9C0ACA/5E9C969C" Ref="#PWR0121"  Part="1" 
-AR Path="/5EA216A1/5E9C969C" Ref="#PWR0126"  Part="1" 
-AR Path="/5EA266C5/5E9C969C" Ref="#PWR0131"  Part="1" 
-AR Path="/5EA27AAF/5E9C969C" Ref="#PWR0136"  Part="1" 
-AR Path="/5E966E88/5E9C969C" Ref="#PWR0141"  Part="1" 
-AR Path="/5E96711E/5E9C969C" Ref="#PWR0146"  Part="1" 
-AR Path="/5E967389/5E9C969C" Ref="#PWR0151"  Part="1" 
-AR Path="/5E967587/5E9C969C" Ref="#PWR0156"  Part="1" 
-F 0 "#PWR0136" H 2350 1550 50  0001 C CNN
-F 1 "GND" H 2355 1627 50  0000 C CNN
-F 2 "" H 2350 1800 50  0001 C CNN
-F 3 "" H 2350 1800 50  0001 C CNN
-	1    2350 1800
-	-1   0    0    1   
 $EndComp
 $Comp
 L power:GND #PWR?
@@ -106,7 +47,8 @@ AR Path="/5E966E88/5E9C96A2" Ref="#PWR0142"  Part="1"
 AR Path="/5E96711E/5E9C96A2" Ref="#PWR0147"  Part="1" 
 AR Path="/5E967389/5E9C96A2" Ref="#PWR0152"  Part="1" 
 AR Path="/5E967587/5E9C96A2" Ref="#PWR0157"  Part="1" 
-F 0 "#PWR0137" H 3500 2150 50  0001 C CNN
+AR Path="/5ED817BE/5E9C96A2" Ref="#PWR0126"  Part="1" 
+F 0 "#PWR0122" H 3500 2150 50  0001 C CNN
 F 1 "GND" H 3505 2227 50  0000 C CNN
 F 2 "" H 3500 2400 50  0001 C CNN
 F 3 "" H 3500 2400 50  0001 C CNN
@@ -126,7 +68,8 @@ AR Path="/5E966E88/5E9C96A8" Ref="D32"  Part="1"
 AR Path="/5E96711E/5E9C96A8" Ref="D37"  Part="1" 
 AR Path="/5E967389/5E9C96A8" Ref="D42"  Part="1" 
 AR Path="/5E967587/5E9C96A8" Ref="D47"  Part="1" 
-F 0 "D27" V 3196 2621 50  0000 R CNN
+AR Path="/5ED817BE/5E9C96A8" Ref="D53"  Part="1" 
+F 0 "D12" V 3196 2621 50  0000 R CNN
 F 1 "1N4148" V 3105 2621 50  0000 R CNN
 F 2 "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal" H 3150 2525 50  0001 C CNN
 F 3 "https://assets.nexperia.com/documents/data-sheet/1N4148_1N4448.pdf" H 3150 2700 50  0001 C CNN
@@ -146,7 +89,8 @@ AR Path="/5E966E88/5E9C96AE" Ref="RV10"  Part="1"
 AR Path="/5E96711E/5E9C96AE" Ref="RV12"  Part="1" 
 AR Path="/5E967389/5E9C96AE" Ref="RV14"  Part="1" 
 AR Path="/5E967587/5E9C96AE" Ref="RV16"  Part="1" 
-F 0 "RV8" V 2943 3150 50  0000 C CNN
+AR Path="/5ED817BE/5E9C96AE" Ref="RV18"  Part="1" 
+F 0 "RV2" V 2943 3150 50  0000 C CNN
 F 1 "R_POT" V 3034 3150 50  0000 C CNN
 F 2 "Potentiometer_THT:Potentiometer_Alps_RK163_Single_Horizontal" H 3150 3150 50  0001 C CNN
 F 3 "~" H 3150 3150 50  0001 C CNN
@@ -166,7 +110,8 @@ AR Path="/5E966E88/5E9C96B4" Ref="#PWR0143"  Part="1"
 AR Path="/5E96711E/5E9C96B4" Ref="#PWR0148"  Part="1" 
 AR Path="/5E967389/5E9C96B4" Ref="#PWR0153"  Part="1" 
 AR Path="/5E967587/5E9C96B4" Ref="#PWR0158"  Part="1" 
-F 0 "#PWR0138" H 3500 2900 50  0001 C CNN
+AR Path="/5ED817BE/5E9C96B4" Ref="#PWR0131"  Part="1" 
+F 0 "#PWR0123" H 3500 2900 50  0001 C CNN
 F 1 "GND" H 3505 2977 50  0000 C CNN
 F 2 "" H 3500 3150 50  0001 C CNN
 F 3 "" H 3500 3150 50  0001 C CNN
@@ -186,7 +131,8 @@ AR Path="/5E966E88/5E9C96BB" Ref="R27"  Part="1"
 AR Path="/5E96711E/5E9C96BB" Ref="R30"  Part="1" 
 AR Path="/5E967389/5E9C96BB" Ref="R33"  Part="1" 
 AR Path="/5E967587/5E9C96BB" Ref="R36"  Part="1" 
-F 0 "R24" H 2920 3546 50  0000 L CNN
+AR Path="/5ED817BE/5E9C96BB" Ref="R44"  Part="1" 
+F 0 "R15" H 2920 3546 50  0000 L CNN
 F 1 "1k" H 2920 3455 50  0000 L CNN
 F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical" V 2780 3500 50  0001 C CNN
 F 3 "~" H 2850 3500 50  0001 C CNN
@@ -194,11 +140,11 @@ F 3 "~" H 2850 3500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1900 5450 1950 5450
+	5000 1900 5050 1900
 $Comp
 L Switch:SW_Push SW?
 U 1 1 5E9C96DA
-P 2150 5450
+P 5250 1900
 AR Path="/5E9C96DA" Ref="SW?"  Part="1" 
 AR Path="/5E9C0ACA/5E9C96DA" Ref="SW4"  Part="1" 
 AR Path="/5EA216A1/5E9C96DA" Ref="SW6"  Part="1" 
@@ -208,11 +154,12 @@ AR Path="/5E966E88/5E9C96DA" Ref="SW12"  Part="1"
 AR Path="/5E96711E/5E9C96DA" Ref="SW14"  Part="1" 
 AR Path="/5E967389/5E9C96DA" Ref="SW16"  Part="1" 
 AR Path="/5E967587/5E9C96DA" Ref="SW18"  Part="1" 
-F 0 "SW10" H 2150 5735 50  0000 C CNN
-F 1 "SW_Push" H 2150 5644 50  0000 C CNN
-F 2 "" H 2150 5650 50  0001 C CNN
-F 3 "~" H 2150 5650 50  0001 C CNN
-	1    2150 5450
+AR Path="/5ED817BE/5E9C96DA" Ref="SW21"  Part="1" 
+F 0 "SW4" H 5250 2185 50  0000 C CNN
+F 1 "SW_Push" H 5250 2094 50  0000 C CNN
+F 2 "Button_Switch_THT:SW_PUSH_6mm_H4.3mm" H 5250 2100 50  0001 C CNN
+F 3 "~" H 5250 2100 50  0001 C CNN
+	1    5250 1900
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -228,7 +175,8 @@ AR Path="/5E966E88/5E9C96E0" Ref="#PWR0144"  Part="1"
 AR Path="/5E96711E/5E9C96E0" Ref="#PWR0149"  Part="1" 
 AR Path="/5E967389/5E9C96E0" Ref="#PWR0154"  Part="1" 
 AR Path="/5E967587/5E9C96E0" Ref="#PWR0159"  Part="1" 
-F 0 "#PWR0139" H 3100 3950 50  0001 C CNN
+AR Path="/5ED817BE/5E9C96E0" Ref="#PWR0136"  Part="1" 
+F 0 "#PWR0124" H 3100 3950 50  0001 C CNN
 F 1 "GND" H 3105 4027 50  0000 C CNN
 F 2 "" H 3100 4200 50  0001 C CNN
 F 3 "" H 3100 4200 50  0001 C CNN
@@ -248,7 +196,8 @@ AR Path="/5E966E88/5E9C96E6" Ref="J13"  Part="1"
 AR Path="/5E96711E/5E9C96E6" Ref="J14"  Part="1" 
 AR Path="/5E967389/5E9C96E6" Ref="J15"  Part="1" 
 AR Path="/5E967587/5E9C96E6" Ref="J16"  Part="1" 
-F 0 "J12" H 3120 4083 50  0000 R CNN
+AR Path="/5ED817BE/5E9C96E6" Ref="J17"  Part="1" 
+F 0 "J9" H 3120 4083 50  0000 R CNN
 F 1 "STEP GATE" H 3120 4174 50  0000 R CNN
 F 2 "" H 3300 4100 50  0001 C CNN
 F 3 "~" H 3300 4100 50  0001 C CNN
@@ -268,7 +217,8 @@ AR Path="/5E966E88/5E9C96EC" Ref="D31"  Part="1"
 AR Path="/5E96711E/5E9C96EC" Ref="D36"  Part="1" 
 AR Path="/5E967389/5E9C96EC" Ref="D41"  Part="1" 
 AR Path="/5E967587/5E9C96EC" Ref="D46"  Part="1" 
-F 0 "D26" V 2896 3871 50  0000 R CNN
+AR Path="/5ED817BE/5E9C96EC" Ref="D50"  Part="1" 
+F 0 "D11" V 2896 3871 50  0000 R CNN
 F 1 "1N4148" V 2805 3871 50  0000 R CNN
 F 2 "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal" H 2850 3775 50  0001 C CNN
 F 3 "https://assets.nexperia.com/documents/data-sheet/1N4148_1N4448.pdf" H 2850 3950 50  0001 C CNN
@@ -288,7 +238,8 @@ AR Path="/5E966E88/5E9C96F3" Ref="D33"  Part="1"
 AR Path="/5E96711E/5E9C96F3" Ref="D38"  Part="1" 
 AR Path="/5E967389/5E9C96F3" Ref="D43"  Part="1" 
 AR Path="/5E967587/5E9C96F3" Ref="D48"  Part="1" 
-F 0 "D28" V 3196 3371 50  0000 R CNN
+AR Path="/5ED817BE/5E9C96F3" Ref="D54"  Part="1" 
+F 0 "D13" V 3196 3371 50  0000 R CNN
 F 1 "1N4148" V 3105 3371 50  0000 R CNN
 F 2 "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal" H 3150 3275 50  0001 C CNN
 F 3 "https://assets.nexperia.com/documents/data-sheet/1N4148_1N4448.pdf" H 3150 3450 50  0001 C CNN
@@ -302,53 +253,24 @@ Wire Wire Line
 	2850 4100 3100 4100
 Wire Wire Line
 	3150 2850 3650 2850
-Text HLabel 3650 2850 2    50   Output ~ 0
-STAGE_CV1
 Wire Wire Line
 	3150 3600 3650 3600
 Text HLabel 3650 3600 2    50   Output ~ 0
 STAGE_CV2
-Text HLabel 2350 4100 3    50   Input ~ 0
+Text HLabel 1350 1850 0    50   Input ~ 0
 STEP
-Text HLabel 3300 5450 2    50   Output ~ 0
-BUTTON
-Text HLabel 3300 6050 2    50   Output ~ 0
+Text HLabel 6425 2800 2    50   Output ~ 0
 BUTTON_GATE
-$Comp
-L Switch:SW_SPST SW5
-U 1 1 5E9D9783
-P 2350 3600
-AR Path="/5E9C0ACA/5E9D9783" Ref="SW5"  Part="1" 
-AR Path="/5EA216A1/5E9D9783" Ref="SW7"  Part="1" 
-AR Path="/5EA266C5/5E9D9783" Ref="SW9"  Part="1" 
-AR Path="/5EA27AAF/5E9D9783" Ref="SW11"  Part="1" 
-AR Path="/5E966E88/5E9D9783" Ref="SW13"  Part="1" 
-AR Path="/5E96711E/5E9D9783" Ref="SW15"  Part="1" 
-AR Path="/5E967389/5E9D9783" Ref="SW17"  Part="1" 
-AR Path="/5E967587/5E9D9783" Ref="SW19"  Part="1" 
-F 0 "SW11" V 2396 3512 50  0000 R CNN
-F 1 "SW_SPST" V 2305 3512 50  0000 R CNN
-F 2 "" H 2350 3600 50  0001 C CNN
-F 3 "~" H 2350 3600 50  0001 C CNN
-	1    2350 3600
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	2350 3800 2350 4100
 Wire Wire Line
 	2350 2400 2350 3150
 Wire Wire Line
 	2350 2400 3000 2400
-Connection ~ 2350 2400
 Wire Wire Line
 	2350 3150 2850 3150
-Connection ~ 2350 3150
-Wire Wire Line
-	2350 3150 2350 3400
 $Comp
 L Diode:1N4148 D10
 U 1 1 5E7DC9C0
-P 2950 5750
+P 6050 2200
 AR Path="/5E9C0ACA/5E7DC9C0" Ref="D10"  Part="1" 
 AR Path="/5EA27AAF/5E7DC9C0" Ref="D25"  Part="1" 
 AR Path="/5EA216A1/5E7DC9C0" Ref="D15"  Part="1" 
@@ -357,20 +279,21 @@ AR Path="/5E966E88/5E7DC9C0" Ref="D30"  Part="1"
 AR Path="/5E96711E/5E7DC9C0" Ref="D35"  Part="1" 
 AR Path="/5E967389/5E7DC9C0" Ref="D40"  Part="1" 
 AR Path="/5E967587/5E7DC9C0" Ref="D45"  Part="1" 
-F 0 "D25" V 2996 5671 50  0000 R CNN
-F 1 "1N4148" V 2905 5671 50  0000 R CNN
-F 2 "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal" H 2950 5575 50  0001 C CNN
-F 3 "https://assets.nexperia.com/documents/data-sheet/1N4148_1N4448.pdf" H 2950 5750 50  0001 C CNN
-	1    2950 5750
+AR Path="/5ED817BE/5E7DC9C0" Ref="D51"  Part="1" 
+F 0 "D10" V 6096 2121 50  0000 R CNN
+F 1 "1N4148" V 6005 2121 50  0000 R CNN
+F 2 "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal" H 6050 2025 50  0001 C CNN
+F 3 "https://assets.nexperia.com/documents/data-sheet/1N4148_1N4448.pdf" H 6050 2200 50  0001 C CNN
+	1    6050 2200
 	0    -1   -1   0   
 $EndComp
 Wire Wire Line
-	2950 6050 3300 6050
+	6050 2500 6400 2500
 Wire Wire Line
-	2950 5900 2950 6050
+	6050 2350 6050 2500
 Wire Wire Line
-	2950 5600 2950 5450
-Text Notes 1100 3650 0    50   ~ 0
+	6050 2050 6050 1900
+Text Notes 1075 2500 0    50   ~ 0
 Enable/disable switch added\nto LMNC version.
 Wire Wire Line
 	3300 3150 3500 3150
@@ -380,56 +303,136 @@ Wire Wire Line
 	2850 3650 2850 3800
 Wire Wire Line
 	2850 3150 2850 3350
-Text GLabel 1900 5450 0    50   Input ~ 0
+Text GLabel 5000 1900 0    50   Input ~ 0
 VCC
 Wire Wire Line
-	2350 5450 2475 5450
+	5450 1900 5575 1900
 $Comp
 L Device:R R?
 U 1 1 5EA4A117
-P 2475 5750
+P 5575 2200
 AR Path="/5EA4A117" Ref="R?"  Part="1" 
-AR Path="/5E9C0ACA/5EA4A117" Ref="R?"  Part="1" 
-AR Path="/5EA216A1/5EA4A117" Ref="R?"  Part="1" 
-AR Path="/5EA266C5/5EA4A117" Ref="R?"  Part="1" 
-AR Path="/5EA27AAF/5EA4A117" Ref="R?"  Part="1" 
-AR Path="/5E966E88/5EA4A117" Ref="R?"  Part="1" 
-AR Path="/5E96711E/5EA4A117" Ref="R?"  Part="1" 
-AR Path="/5E967389/5EA4A117" Ref="R?"  Part="1" 
-AR Path="/5E967587/5EA4A117" Ref="R?"  Part="1" 
-F 0 "R?" H 2545 5796 50  0000 L CNN
-F 1 "10k" H 2545 5705 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical" V 2405 5750 50  0001 C CNN
-F 3 "~" H 2475 5750 50  0001 C CNN
-	1    2475 5750
+AR Path="/5E9C0ACA/5EA4A117" Ref="R28"  Part="1" 
+AR Path="/5EA216A1/5EA4A117" Ref="R31"  Part="1" 
+AR Path="/5EA266C5/5EA4A117" Ref="R34"  Part="1" 
+AR Path="/5EA27AAF/5EA4A117" Ref="R37"  Part="1" 
+AR Path="/5E966E88/5EA4A117" Ref="R38"  Part="1" 
+AR Path="/5E96711E/5EA4A117" Ref="R39"  Part="1" 
+AR Path="/5E967389/5EA4A117" Ref="R40"  Part="1" 
+AR Path="/5E967587/5EA4A117" Ref="R41"  Part="1" 
+AR Path="/5ED817BE/5EA4A117" Ref="R43"  Part="1" 
+F 0 "R28" H 5645 2246 50  0000 L CNN
+F 1 "10k" H 5645 2155 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical" V 5505 2200 50  0001 C CNN
+F 3 "~" H 5575 2200 50  0001 C CNN
+	1    5575 2200
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2475 5600 2475 5450
-Connection ~ 2475 5450
+	5575 2050 5575 1900
+Connection ~ 5575 1900
 Wire Wire Line
-	2475 5450 2950 5450
+	5575 1900 6050 1900
 $Comp
 L power:GND #PWR?
 U 1 1 5EA4ACFF
-P 2475 5900
+P 5575 2350
 AR Path="/5EA4ACFF" Ref="#PWR?"  Part="1" 
-AR Path="/5E9C0ACA/5EA4ACFF" Ref="#PWR?"  Part="1" 
-AR Path="/5EA216A1/5EA4ACFF" Ref="#PWR?"  Part="1" 
-AR Path="/5EA266C5/5EA4ACFF" Ref="#PWR?"  Part="1" 
-AR Path="/5EA27AAF/5EA4ACFF" Ref="#PWR?"  Part="1" 
-AR Path="/5E966E88/5EA4ACFF" Ref="#PWR?"  Part="1" 
-AR Path="/5E96711E/5EA4ACFF" Ref="#PWR?"  Part="1" 
-AR Path="/5E967389/5EA4ACFF" Ref="#PWR?"  Part="1" 
-AR Path="/5E967587/5EA4ACFF" Ref="#PWR?"  Part="1" 
-F 0 "#PWR?" H 2475 5650 50  0001 C CNN
-F 1 "GND" H 2480 5727 50  0000 C CNN
-F 2 "" H 2475 5900 50  0001 C CNN
-F 3 "" H 2475 5900 50  0001 C CNN
-	1    2475 5900
+AR Path="/5E9C0ACA/5EA4ACFF" Ref="#PWR0125"  Part="1" 
+AR Path="/5EA216A1/5EA4ACFF" Ref="#PWR0130"  Part="1" 
+AR Path="/5EA266C5/5EA4ACFF" Ref="#PWR0135"  Part="1" 
+AR Path="/5EA27AAF/5EA4ACFF" Ref="#PWR0140"  Part="1" 
+AR Path="/5E966E88/5EA4ACFF" Ref="#PWR0145"  Part="1" 
+AR Path="/5E96711E/5EA4ACFF" Ref="#PWR0150"  Part="1" 
+AR Path="/5E967389/5EA4ACFF" Ref="#PWR0155"  Part="1" 
+AR Path="/5E967587/5EA4ACFF" Ref="#PWR0160"  Part="1" 
+AR Path="/5ED817BE/5EA4ACFF" Ref="#PWR0141"  Part="1" 
+F 0 "#PWR0125" H 5575 2100 50  0001 C CNN
+F 1 "GND" H 5580 2177 50  0000 C CNN
+F 2 "" H 5575 2350 50  0001 C CNN
+F 3 "" H 5575 2350 50  0001 C CNN
+	1    5575 2350
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2950 5450 3300 5450
-Connection ~ 2950 5450
+	6050 1900 6400 1900
+Connection ~ 6050 1900
+Wire Wire Line
+	3000 1950 2350 1950
+Wire Wire Line
+	2350 1950 2350 2400
+Connection ~ 2350 2400
+$Comp
+L Device:LED D29
+U 1 1 5EDFA947
+P 3150 1950
+AR Path="/5E966E88/5EDFA947" Ref="D29"  Part="1" 
+AR Path="/5E9C0ACA/5EDFA947" Ref="D9"  Part="1" 
+AR Path="/5EA216A1/5EDFA947" Ref="D14"  Part="1" 
+AR Path="/5EA266C5/5EDFA947" Ref="D19"  Part="1" 
+AR Path="/5EA27AAF/5EDFA947" Ref="D24"  Part="1" 
+AR Path="/5E96711E/5EDFA947" Ref="D34"  Part="1" 
+AR Path="/5E967389/5EDFA947" Ref="D39"  Part="1" 
+AR Path="/5E967587/5EDFA947" Ref="D44"  Part="1" 
+AR Path="/5ED817BE/5EDFA947" Ref="D52"  Part="1" 
+F 0 "D9" H 3143 2166 50  0000 C CNN
+F 1 "LED" H 3143 2075 50  0000 C CNN
+F 2 "LED_THT:LED_D5.0mm" H 3150 1950 50  0001 C CNN
+F 3 "~" H 3150 1950 50  0001 C CNN
+	1    3150 1950
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	3300 1950 3600 1950
+Text HLabel 3650 2850 2    50   Output ~ 0
+STAGE_CV1
+Text HLabel 3600 1950 2    50   Output ~ 0
+LED_BUS
+Text HLabel 6400 1900 2    50   Output ~ 0
+BUTTON
+Wire Wire Line
+	6400 2500 6400 2800
+Wire Wire Line
+	6400 2800 6425 2800
+$Comp
+L Switch:SW_SPDT SW?
+U 1 1 5ED9BA38
+P 1725 1950
+F 0 "SW?" H 1725 2235 50  0000 C CNN
+F 1 "SW_SPDT" H 1725 2144 50  0000 C CNN
+F 2 "" H 1725 1950 50  0001 C CNN
+F 3 "~" H 1725 1950 50  0001 C CNN
+	1    1725 1950
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	1350 1850 1525 1850
+Wire Wire Line
+	1925 1950 2350 1950
+Wire Wire Line
+	1525 2050 1350 2050
+$Comp
+L power:GND #PWR?
+U 1 1 5ED9F04B
+P 1350 2050
+AR Path="/5ED9F04B" Ref="#PWR?"  Part="1" 
+AR Path="/5E9C0ACA/5ED9F04B" Ref="#PWR?"  Part="1" 
+AR Path="/5EA216A1/5ED9F04B" Ref="#PWR?"  Part="1" 
+AR Path="/5EA266C5/5ED9F04B" Ref="#PWR?"  Part="1" 
+AR Path="/5EA27AAF/5ED9F04B" Ref="#PWR?"  Part="1" 
+AR Path="/5E966E88/5ED9F04B" Ref="#PWR?"  Part="1" 
+AR Path="/5E96711E/5ED9F04B" Ref="#PWR?"  Part="1" 
+AR Path="/5E967389/5ED9F04B" Ref="#PWR?"  Part="1" 
+AR Path="/5E967587/5ED9F04B" Ref="#PWR?"  Part="1" 
+AR Path="/5ED817BE/5ED9F04B" Ref="#PWR?"  Part="1" 
+F 0 "#PWR?" H 1350 1800 50  0001 C CNN
+F 1 "GND" H 1355 1877 50  0000 C CNN
+F 2 "" H 1350 2050 50  0001 C CNN
+F 3 "" H 1350 2050 50  0001 C CNN
+	1    1350 2050
+	1    0    0    -1  
+$EndComp
+Connection ~ 2350 1950
+Text Notes 2025 1625 0    50   ~ 0
+LMNC version had separate LED resistor for each stage
 $EndSCHEMATC
