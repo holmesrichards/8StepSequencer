@@ -18,15 +18,15 @@
 #define ZERO     11
 #define FORW     12
 #define BACK     13
-#define ROTARY   A0
+#define ROTARY   A7
 #define BUTTON1  10  // same as RESET (same action)
-#define BUTTON2  15
-#define BUTTON3  16
-#define BUTTON4  17
-#define BUTTON5  18
-#define BUTTON6  19
-#define BUTTON7  A6  // must be read as analog
-#define BUTTON8  A7
+#define BUTTON2  14
+#define BUTTON3  15
+#define BUTTON4  16
+#define BUTTON5  17
+#define BUTTON6  18
+#define BUTTON7  19
+#define BUTTON8  A6  // must be read as analog
 
 #define GATEOFFTIME 1
 
@@ -85,7 +85,8 @@ void setup ()
   pinMode (BUTTON3, INPUT);
   pinMode (BUTTON4, INPUT);
   pinMode (BUTTON5, INPUT);
-  pinMode (BUTTON6, INPUT);  // BUTTON7 and BUTTON8 will be read as analog
+  pinMode (BUTTON6, INPUT);
+  pinMode (BUTTON7, INPUT);  // BUTTON8 and ROTARY will be read as analog
 }
 
 void loop ()
@@ -224,7 +225,7 @@ void loop ()
   // because button 1 and reset produce the same signal and we already
   // checked that
   
-  for (int ib = 2; ib <= 6; ++ib)
+  for (int ib = 2; ib <= 7; ++ib)
     {
       val = digitalRead (buttons[ib-1]);
       if (val == HIGH && old_valButton[ib-1] == LOW)
@@ -235,19 +236,16 @@ void loop ()
       old_valButton[ib-1] = val;
     }
 
-  // Pins A6 and A7 cannot be read as digital on the Nano so read
+  // Pin A6 cannot be read as digital on the Nano so read
   // as analog and expect > 1000 when button pressed
   
-  for (int ib = 7; ib <= 8; ++ib)
+  val = analogRead (buttons[7]);
+  if (val > 1000 && old_valButton[7] < 1000)
     {
-      val = analogRead (buttons[ib-1]);
-      if (val > 1000 && old_valButton[ib-1] < 1000)
-	{
-	  doNewGate = true;
-	  stepOn = ib;
-	}
-      old_valButton[ib-1] = val;
+      doNewGate = true;
+      stepOn = ib;
     }
+  old_valButton[7] = val;
   
   // Now we've determined what to do, so if we need a new gate, do it
   

@@ -1,6 +1,6 @@
-update=Sun 05 Apr 2020 11:11:04 PM EDT
+update=Tue 23 Jun 2020 01:00:26 PM EDT
 version=1
-last_client=eeschema
+last_client=kicad
 [general]
 version=1
 RootSch=
@@ -34,7 +34,7 @@ LibDir=
 [schematic_editor]
 version=1
 PageLayoutDescrFile=
-PlotDirectoryName=
+PlotDirectoryName=./
 SubpartIdSeparator=0
 SubpartFirstId=65
 NetFmtName=

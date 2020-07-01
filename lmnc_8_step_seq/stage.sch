@@ -1,7 +1,7 @@
 EESchema Schematic File Version 4
 EELAYER 30 0
 EELAYER END
-$Descr A4 11693 8268
+$Descr USLetter 11000 8500
 encoding utf-8
 Sheet 9 9
 Title "8 Step Keyboard Sequencer"
@@ -121,7 +121,7 @@ $EndComp
 $Comp
 L Device:R R?
 U 1 1 5E9C96BB
-P 2850 3500
+P 2350 3475
 AR Path="/5E9C96BB" Ref="R?"  Part="1" 
 AR Path="/5E9C0ACA/5E9C96BB" Ref="R15"  Part="1" 
 AR Path="/5EA216A1/5E9C96BB" Ref="R18"  Part="1" 
@@ -132,11 +132,11 @@ AR Path="/5E96711E/5E9C96BB" Ref="R30"  Part="1"
 AR Path="/5E967389/5E9C96BB" Ref="R33"  Part="1" 
 AR Path="/5E967587/5E9C96BB" Ref="R36"  Part="1" 
 AR Path="/5ED817BE/5E9C96BB" Ref="R44"  Part="1" 
-F 0 "R15" H 2920 3546 50  0000 L CNN
-F 1 "1k" H 2920 3455 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical" V 2780 3500 50  0001 C CNN
-F 3 "~" H 2850 3500 50  0001 C CNN
-	1    2850 3500
+F 0 "R15" H 2420 3521 50  0000 L CNN
+F 1 "1k" H 2420 3430 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical" V 2280 3475 50  0001 C CNN
+F 3 "~" H 2350 3475 50  0001 C CNN
+	1    2350 3475
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -165,7 +165,7 @@ $EndComp
 $Comp
 L power:GND #PWR?
 U 1 1 5E9C96E0
-P 3100 4200
+P 2775 4225
 AR Path="/5E9C96E0" Ref="#PWR?"  Part="1" 
 AR Path="/5E9C0ACA/5E9C96E0" Ref="#PWR0124"  Part="1" 
 AR Path="/5EA216A1/5E9C96E0" Ref="#PWR0129"  Part="1" 
@@ -176,17 +176,17 @@ AR Path="/5E96711E/5E9C96E0" Ref="#PWR0149"  Part="1"
 AR Path="/5E967389/5E9C96E0" Ref="#PWR0154"  Part="1" 
 AR Path="/5E967587/5E9C96E0" Ref="#PWR0159"  Part="1" 
 AR Path="/5ED817BE/5E9C96E0" Ref="#PWR0136"  Part="1" 
-F 0 "#PWR0124" H 3100 3950 50  0001 C CNN
-F 1 "GND" H 3105 4027 50  0000 C CNN
-F 2 "" H 3100 4200 50  0001 C CNN
-F 3 "" H 3100 4200 50  0001 C CNN
-	1    3100 4200
+F 0 "#PWR0124" H 2775 3975 50  0001 C CNN
+F 1 "GND" H 2780 4052 50  0000 C CNN
+F 2 "" H 2775 4225 50  0001 C CNN
+F 3 "" H 2775 4225 50  0001 C CNN
+	1    2775 4225
 	1    0    0    -1  
 $EndComp
 $Comp
 L Connector:AudioJack2 J?
 U 1 1 5E9C96E6
-P 3300 4100
+P 2975 4125
 AR Path="/5E9C96E6" Ref="J?"  Part="1" 
 AR Path="/5E9C0ACA/5E9C96E6" Ref="J9"  Part="1" 
 AR Path="/5EA216A1/5E9C96E6" Ref="J10"  Part="1" 
@@ -197,17 +197,17 @@ AR Path="/5E96711E/5E9C96E6" Ref="J14"  Part="1"
 AR Path="/5E967389/5E9C96E6" Ref="J15"  Part="1" 
 AR Path="/5E967587/5E9C96E6" Ref="J16"  Part="1" 
 AR Path="/5ED817BE/5E9C96E6" Ref="J17"  Part="1" 
-F 0 "J9" H 3120 4083 50  0000 R CNN
-F 1 "STEP GATE" H 3120 4174 50  0000 R CNN
-F 2 "" H 3300 4100 50  0001 C CNN
-F 3 "~" H 3300 4100 50  0001 C CNN
-	1    3300 4100
+F 0 "J9" H 2795 4108 50  0000 R CNN
+F 1 "STEP GATE" H 2795 4199 50  0000 R CNN
+F 2 "" H 2975 4125 50  0001 C CNN
+F 3 "~" H 2975 4125 50  0001 C CNN
+	1    2975 4125
 	-1   0    0    1   
 $EndComp
 $Comp
 L Diode:1N4148 D?
 U 1 1 5E9C96EC
-P 2850 3950
+P 2350 3875
 AR Path="/5E9C96EC" Ref="D?"  Part="1" 
 AR Path="/5E9C0ACA/5E9C96EC" Ref="D11"  Part="1" 
 AR Path="/5EA216A1/5E9C96EC" Ref="D16"  Part="1" 
@@ -218,11 +218,11 @@ AR Path="/5E96711E/5E9C96EC" Ref="D36"  Part="1"
 AR Path="/5E967389/5E9C96EC" Ref="D41"  Part="1" 
 AR Path="/5E967587/5E9C96EC" Ref="D46"  Part="1" 
 AR Path="/5ED817BE/5E9C96EC" Ref="D50"  Part="1" 
-F 0 "D11" V 2896 3871 50  0000 R CNN
-F 1 "1N4148" V 2805 3871 50  0000 R CNN
-F 2 "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal" H 2850 3775 50  0001 C CNN
-F 3 "https://assets.nexperia.com/documents/data-sheet/1N4148_1N4448.pdf" H 2850 3950 50  0001 C CNN
-	1    2850 3950
+F 0 "D11" V 2396 3796 50  0000 R CNN
+F 1 "1N4148" V 2305 3796 50  0000 R CNN
+F 2 "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal" H 2350 3700 50  0001 C CNN
+F 3 "https://assets.nexperia.com/documents/data-sheet/1N4148_1N4448.pdf" H 2350 3875 50  0001 C CNN
+	1    2350 3875
 	0    -1   -1   0   
 $EndComp
 $Comp
@@ -247,11 +247,6 @@ F 3 "https://assets.nexperia.com/documents/data-sheet/1N4148_1N4448.pdf" H 3150 
 	0    -1   -1   0   
 $EndComp
 Wire Wire Line
-	2850 3150 3000 3150
-Connection ~ 2850 3150
-Wire Wire Line
-	2850 4100 3100 4100
-Wire Wire Line
 	3150 2850 3650 2850
 Wire Wire Line
 	3150 3600 3650 3600
@@ -265,8 +260,6 @@ Wire Wire Line
 	2350 2400 2350 3150
 Wire Wire Line
 	2350 2400 3000 2400
-Wire Wire Line
-	2350 3150 2850 3150
 $Comp
 L Diode:1N4148 D10
 U 1 1 5E7DC9C0
@@ -299,10 +292,6 @@ Wire Wire Line
 	3300 3150 3500 3150
 Wire Wire Line
 	3300 2400 3500 2400
-Wire Wire Line
-	2850 3650 2850 3800
-Wire Wire Line
-	2850 3150 2850 3350
 Text GLabel 5000 1900 0    50   Input ~ 0
 VCC
 Wire Wire Line
@@ -395,10 +384,18 @@ Wire Wire Line
 Wire Wire Line
 	6400 2800 6425 2800
 $Comp
-L Switch:SW_SPDT SW?
+L Switch:SW_SPDT SW5
 U 1 1 5ED9BA38
 P 1725 1950
-F 0 "SW?" H 1725 2235 50  0000 C CNN
+AR Path="/5EA216A1/5ED9BA38" Ref="SW5"  Part="1" 
+AR Path="/5EA266C5/5ED9BA38" Ref="SW7"  Part="1" 
+AR Path="/5EA27AAF/5ED9BA38" Ref="SW9"  Part="1" 
+AR Path="/5E966E88/5ED9BA38" Ref="SW11"  Part="1" 
+AR Path="/5E96711E/5ED9BA38" Ref="SW13"  Part="1" 
+AR Path="/5E967389/5ED9BA38" Ref="SW15"  Part="1" 
+AR Path="/5E967587/5ED9BA38" Ref="SW17"  Part="1" 
+AR Path="/5E9C0ACA/5ED9BA38" Ref="SW19"  Part="1" 
+F 0 "SW19" H 1725 2235 50  0000 C CNN
 F 1 "SW_SPDT" H 1725 2144 50  0000 C CNN
 F 2 "" H 1725 1950 50  0001 C CNN
 F 3 "~" H 1725 1950 50  0001 C CNN
@@ -416,16 +413,16 @@ L power:GND #PWR?
 U 1 1 5ED9F04B
 P 1350 2050
 AR Path="/5ED9F04B" Ref="#PWR?"  Part="1" 
-AR Path="/5E9C0ACA/5ED9F04B" Ref="#PWR?"  Part="1" 
-AR Path="/5EA216A1/5ED9F04B" Ref="#PWR?"  Part="1" 
-AR Path="/5EA266C5/5ED9F04B" Ref="#PWR?"  Part="1" 
-AR Path="/5EA27AAF/5ED9F04B" Ref="#PWR?"  Part="1" 
-AR Path="/5E966E88/5ED9F04B" Ref="#PWR?"  Part="1" 
-AR Path="/5E96711E/5ED9F04B" Ref="#PWR?"  Part="1" 
-AR Path="/5E967389/5ED9F04B" Ref="#PWR?"  Part="1" 
-AR Path="/5E967587/5ED9F04B" Ref="#PWR?"  Part="1" 
+AR Path="/5E9C0ACA/5ED9F04B" Ref="#PWR0166"  Part="1" 
+AR Path="/5EA216A1/5ED9F04B" Ref="#PWR0151"  Part="1" 
+AR Path="/5EA266C5/5ED9F04B" Ref="#PWR0156"  Part="1" 
+AR Path="/5EA27AAF/5ED9F04B" Ref="#PWR0161"  Part="1" 
+AR Path="/5E966E88/5ED9F04B" Ref="#PWR0162"  Part="1" 
+AR Path="/5E96711E/5ED9F04B" Ref="#PWR0163"  Part="1" 
+AR Path="/5E967389/5ED9F04B" Ref="#PWR0164"  Part="1" 
+AR Path="/5E967587/5ED9F04B" Ref="#PWR0165"  Part="1" 
 AR Path="/5ED817BE/5ED9F04B" Ref="#PWR?"  Part="1" 
-F 0 "#PWR?" H 1350 1800 50  0001 C CNN
+F 0 "#PWR0166" H 1350 1800 50  0001 C CNN
 F 1 "GND" H 1355 1877 50  0000 C CNN
 F 2 "" H 1350 2050 50  0001 C CNN
 F 3 "" H 1350 2050 50  0001 C CNN
@@ -435,4 +432,15 @@ $EndComp
 Connection ~ 2350 1950
 Text Notes 2025 1625 0    50   ~ 0
 LMNC version had separate LED resistor for each stage
+Wire Wire Line
+	2350 3150 3000 3150
+Wire Wire Line
+	2350 3150 2350 3325
+Wire Wire Line
+	2350 3625 2350 3725
+Connection ~ 2350 3150
+Wire Wire Line
+	2350 4125 2775 4125
+Wire Wire Line
+	2350 4025 2350 4125
 $EndSCHEMATC
