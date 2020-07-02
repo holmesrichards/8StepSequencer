@@ -205,12 +205,8 @@ Wire Wire Line
 	9075 2325 9075 2675
 Wire Wire Line
 	9025 2375 9025 3075
-Text Label 8350 5600 0    50   ~ 0
-ROTARY
 Wire Wire Line
 	8350 4900 8200 4900
-Text Label 8350 5500 0    50   ~ 0
-BUTTON8
 Wire Wire Line
 	8350 5000 8200 5000
 NoConn ~ 8200 4300
@@ -233,35 +229,35 @@ Text Label 7050 5300 2    50   ~ 0
 RESET
 Wire Wire Line
 	7050 5300 7200 5300
-Text Label 7050 4900 2    50   ~ 0
+Text Label 7050 4800 2    50   ~ 0
 STEP5
 Wire Wire Line
 	7050 4900 7200 4900
-Text Label 7050 4800 2    50   ~ 0
+Text Label 7050 4900 2    50   ~ 0
 STEP4
 Wire Wire Line
 	7050 4800 7200 4800
-Text Label 7050 4700 2    50   ~ 0
+Text Label 7050 5000 2    50   ~ 0
 STEP3
 Wire Wire Line
 	7050 4700 7200 4700
-Text Label 7050 4600 2    50   ~ 0
+Text Label 7050 5100 2    50   ~ 0
 STEP2
 Wire Wire Line
 	7050 4600 7200 4600
-Text Label 7050 4500 2    50   ~ 0
+Text Label 7050 5200 2    50   ~ 0
 STEP1
 Wire Wire Line
 	7050 4500 7200 4500
-Text Label 7050 5200 2    50   ~ 0
+Text Label 7050 4500 2    50   ~ 0
 STEP8
 Wire Wire Line
 	7050 5200 7200 5200
-Text Label 7050 5100 2    50   ~ 0
+Text Label 7050 4600 2    50   ~ 0
 STEP7
 Wire Wire Line
 	7050 5100 7200 5100
-Text Label 7050 5000 2    50   ~ 0
+Text Label 7050 4700 2    50   ~ 0
 STEP6
 Wire Wire Line
 	7050 5000 7200 5000
@@ -724,18 +720,6 @@ Wire Wire Line
 	8850 1850 8850 1475
 Wire Wire Line
 	8200 5600 8350 5600
-Text Label 8350 4900 0    50   ~ 0
-BUTTON2
-Text Label 8350 5000 0    50   ~ 0
-BUTTON3
-Text Label 8350 5100 0    50   ~ 0
-BUTTON4
-Text Label 8350 5200 0    50   ~ 0
-BUTTON5
-Text Label 8350 5300 0    50   ~ 0
-BUTTON6
-Text Label 8350 5400 0    50   ~ 0
-BUTTON7
 Wire Wire Line
 	8200 5100 8350 5100
 Wire Wire Line
@@ -1543,4 +1527,20 @@ Wire Notes Line
 	4225 5900 4225 3225
 Text Notes 6750 2800 0    100  ~ 0
 On stripboard
+Text Label 8350 4900 0    50   ~ 0
+BUTTON7
+Text Label 8350 5000 0    50   ~ 0
+BUTTON6
+Text Label 8350 5100 0    50   ~ 0
+BUTTON5
+Text Label 8350 5200 0    50   ~ 0
+BUTTON4
+Text Label 8350 5300 0    50   ~ 0
+BUTTON3
+Text Label 8350 5400 0    50   ~ 0
+BUTTON2
+Text Label 8350 5500 0    50   ~ 0
+BUTTON8
+Text Label 8350 5600 0    50   ~ 0
+ROTARY
 $EndSCHEMATC

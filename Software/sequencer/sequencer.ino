@@ -4,29 +4,33 @@
 
 // CC0 1.0 Rich Holmes 2020
 
+#define DBG 1
+
 // Hardware configuration
 
-#define STEP1     2
-#define STEP2     3
-#define STEP3     4
-#define STEP4     5
-#define STEP5     6
-#define STEP6     7
-#define STEP7     8
-#define STEP8     9
+// Strange pin ordering due to boneheaded wiring mistakes
+
+#define STEP1     9
+#define STEP2     8
+#define STEP3     7
+#define STEP4     6
+#define STEP5     5
+#define STEP6     4
+#define STEP7     3
+#define STEP8     2
 #define RESET    10
 #define ZERO     11
 #define FORW     12
 #define BACK     13
 #define ROTARY   A7
 #define BUTTON1  10  // same as RESET (same action)
-#define BUTTON2  14
-#define BUTTON3  15
-#define BUTTON4  16
-#define BUTTON5  17
-#define BUTTON6  18
-#define BUTTON7  19
-#define BUTTON8  A6  // must be read as analog
+#define BUTTON2  19  // must be read as analog
+#define BUTTON3  18
+#define BUTTON4  17
+#define BUTTON5  16
+#define BUTTON6  15
+#define BUTTON7  14
+#define BUTTON8  A6
 
 #define GATEOFFTIME 1
 
@@ -43,6 +47,7 @@ int old_valBack = 0;
 int old_valButton[] = {0, 0, 0, 0, 0, 0, 0, 0};
 
 int seq_length = 8;
+int old_seq_length = 8;
 
 // stepOn is the step to turn on next, or 0 to turn off all steps
 
@@ -67,7 +72,9 @@ bool pat_first = true;  // true for first of pair, false for second
 
 void setup ()
 {
+#if DBG==1
   Serial.begin(9600);  // for Arduino Uno / Pro Mini
+#endif
   pinMode (STEP1, OUTPUT);
   pinMode (STEP2, OUTPUT);
   pinMode (STEP3, OUTPUT);
@@ -122,7 +129,21 @@ void loop ()
   else if (val > 154) seq_length = 4;
   else if (val > 51) seq_length = 3;
   else seq_length = 2; // we don't allow seq_length == 1, come on, be reasonable
-  
+
+#if DBG==1
+  if (old_seq_length != seq_length)
+    {
+      Serial.print("seq_length ");
+      Serial.println(seq_length);
+    }
+  if (old_pattern != pattern)
+    {
+      Serial.print("pattern ");
+      Serial.println(pattern);
+    }
+#endif
+
+  old_seq_length = seq_length;
   old_pattern = pattern;
 
   // Check the inputs/momentary switches
@@ -135,6 +156,9 @@ void loop ()
     {
       doNewGate = true;
       stepForward = true;
+#if DBG==1
+	  Serial.println("forward ");
+#endif
     }
   old_valForw = val;
   
@@ -144,6 +168,9 @@ void loop ()
     {
       doNewGate = true;
       stepForward = false;
+#if DBG==1
+	  Serial.println("backward ");
+#endif
     }
   old_valBack = val;
 
@@ -209,6 +236,9 @@ void loop ()
     {
       doNewGate = true;
       stepOn = 0;
+#if DBG==1
+	  Serial.println("zero ");
+#endif
     }
   old_valZero = val;
   
@@ -218,6 +248,9 @@ void loop ()
     {
       doNewGate = true;
       stepOn = 1;
+#if DBG==1
+	  Serial.println("reset ");
+#endif
     }
   old_valReset = val;
   
@@ -232,6 +265,12 @@ void loop ()
 	{
 	  doNewGate = true;
 	  stepOn = ib;
+#if DBG==1
+	  Serial.print("pin ");
+	  Serial.print(buttons[ib-1]);
+	  Serial.print(" button ");
+	  Serial.println(ib);
+#endif
 	}
       old_valButton[ib-1] = val;
     }
@@ -243,7 +282,12 @@ void loop ()
   if (val > 1000 && old_valButton[7] < 1000)
     {
       doNewGate = true;
-      stepOn = ib;
+      stepOn = 8;
+#if DBG==1
+	  Serial.print("pin ");
+	  Serial.print(buttons[7]);
+	  Serial.println(" button 8");
+#endif
     }
   old_valButton[7] = val;
   
@@ -252,12 +296,32 @@ void loop ()
   if (doNewGate)
     {
       // Turn off the on step, then turn on the new on step
-      
+
       if (old_stepOn != 0)
+	{
+#if DBG==1
+	  Serial.print("digitalWrite ");
+	  Serial.print(old_stepOn);
+	  Serial.print(" ");
+	  Serial.print(steps[old_stepOn-1]);
+	  Serial.println(" LOW");
+#endif
 	digitalWrite (steps[old_stepOn-1], LOW);
+	}
       delay (GATEOFFTIME);
+   
       if (stepOn != 0)
-	digitalWrite (steps[stepOn-1], HIGH);
+      if (old_stepOn != 0)
+	{
+#if DBG==1
+	  Serial.print("digitalWrite ");
+	  Serial.print(stepOn);
+	  Serial.print(" ");
+	  Serial.print(steps[stepOn-1]);
+	  Serial.println(" HIGH");
+#endif
+	  digitalWrite (steps[stepOn-1], HIGH);
+	}
       old_stepOn = stepOn;
     }
 }
