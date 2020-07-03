@@ -79,10 +79,10 @@ bool pat_first = true;  // true for first of pair, false for second
 
 // debouncing
 unsigned long lastDebounceTime = 0;
-unsigned long debounceDelay = 50;
+unsigned long debounceDelay = 5;
 unsigned new_debounce_state = 0;
 unsigned old_debounce_state = 0;
-
+unsigned delta = 9999;
 
 #if DBG==1
 unsigned int old_seq_length = 8;
@@ -185,16 +185,24 @@ void loop ()
 
   // If changed note the time
   if (new_debounce_state != old_debounce_state)
+  {
+#if DBG==1
+    Serial.print("delta ");
+    Serial.println(millis()-lastDebounceTime);
     lastDebounceTime = millis();
+#endif
+  }  
+  
 
   old_debounce_state = new_debounce_state;
   
   // Proceed only if no state change for a while
-  if ((millis() - lastDebounceTime) < debounceDelay)
+  delta = millis() - lastDebounceTime;
+  if (delta < debounceDelay)
     return;
 
   // Switches are stable so we proceed.
-  
+
   doNewGate = false;
 
   // step forward
