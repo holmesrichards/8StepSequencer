@@ -38,21 +38,29 @@ int steps[] = {STEP1, STEP2, STEP3, STEP4, STEP5, STEP6, STEP7, STEP8};
 int stepset = 0;
 int buttons[] = {BUTTON1, BUTTON2, BUTTON3, BUTTON4, BUTTON5, BUTTON6, BUTTON7, BUTTON8};
 
-unsigned int val = 0;
-int old_valForw = 0;
-int old_valZero = 0;
-int old_valReset = 0;
-int old_valBack = 0;
+unsigned int valRot = 0;
 
-int old_valButton[] = {0, 0, 0, 0, 0, 0, 0, 0};
+unsigned int valForw = 0;
+unsigned int valZero = 0;
+unsigned int valReset = 0;
+unsigned int valBack = 0;
+unsigned int old_valForw = 0;
+unsigned int old_valZero = 0;
+unsigned int old_valReset = 0;
+unsigned int old_valBack = 0;
 
-int seq_length = 8;
-int old_seq_length = 8;
+unsigned int valButton[] = {0, 0, 0, 0, 0, 0, 0, 0};
+unsigned int old_valButton[] = {0, 0, 0, 0, 0, 0, 0, 0};
+unsigned int dbc_valButton[] = {0, 0, 0, 0, 0, 0, 0, 0};
+
+bool changed = false;
+
+unsigned int seq_length = 8;
 
 // stepOn is the step to turn on next, or 0 to turn off all steps
 
-int stepOn = 0;
-int old_stepOn = 0;
+unsigned int stepOn = 0;
+unsigned int old_stepOn = 0;
 
 bool doNewGate = false;  // true if a new gate is to be generated
 bool stepForward = true; // true if a forward or backward step is to be taken
@@ -65,10 +73,21 @@ bool stepForward = true; // true if a forward or backward step is to be taken
 #define PAT_DOUBLE 4  // double (1-1-2-2-3-3-4-4-5-5-6-6-7-7-8-8-)
 #define PAT_RANDOM 5  // random
 
-int pattern = PAT_SINGLE;
-int old_pattern = PAT_SINGLE;
-int pat_dir = 1; // 1 when going forward within pattern, -1 when going backward
+unsigned int pattern = PAT_SINGLE;
+unsigned int pat_dir = 1; // 1 when going forward within pattern, -1 when going backward
 bool pat_first = true;  // true for first of pair, false for second
+
+// debouncing
+unsigned long lastDebounceTime = 0;
+unsigned long debounceDelay = 50;
+unsigned new_debounce_state = 0;
+unsigned old_debounce_state = 0;
+
+
+#if DBG==1
+unsigned int old_seq_length = 8;
+unsigned int old_pattern = PAT_SINGLE;
+#endif
 
 void setup ()
 {
@@ -98,7 +117,7 @@ void setup ()
 
 void loop ()
 {  
-  // Check the rotary switch
+// Check the rotary switch
     
   // Switch selects sequence length (# of stages used) and pattern
   //   
@@ -115,19 +134,19 @@ void loop ()
   // 10          8       Double
   // 11          8       Random
 
-  val = analogRead (ROTARY);
+  valRot = analogRead (ROTARY);
   pattern = PAT_SINGLE;
   seq_length = 8;
-  if (val > 973) pattern = PAT_RANDOM;
-  else if (val > 870) pattern = PAT_DOUBLE;
-  else if (val > 768) pattern = PAT_EXCROT;
-  else if (val > 666) pattern = PAT_INCROT;
-  else if (val > 563) seq_length = 8;
-  else if (val > 461) seq_length = 7;
-  else if (val > 358) seq_length = 6;
-  else if (val > 256) seq_length = 5;
-  else if (val > 154) seq_length = 4;
-  else if (val > 51) seq_length = 3;
+  if (valRot > 973) pattern = PAT_RANDOM;
+  else if (valRot > 870) pattern = PAT_DOUBLE;
+  else if (valRot > 768) pattern = PAT_EXCROT;
+  else if (valRot > 666) pattern = PAT_INCROT;
+  else if (valRot > 563) seq_length = 8;
+  else if (valRot > 461) seq_length = 7;
+  else if (valRot > 358) seq_length = 6;
+  else if (valRot > 256) seq_length = 5;
+  else if (valRot > 154) seq_length = 4;
+  else if (valRot > 51) seq_length = 3;
   else seq_length = 2; // we don't allow seq_length == 1, come on, be reasonable
 
 #if DBG==1
@@ -141,18 +160,45 @@ void loop ()
       Serial.print("pattern ");
       Serial.println(pattern);
     }
-#endif
-
   old_seq_length = seq_length;
   old_pattern = pattern;
+#endif
 
-  // Check the inputs/momentary switches
+  // Next read all buttons and toggles and check for a change
+
+  new_debounce_state = 0;
+  valForw = digitalRead (FORW);
+  new_debounce_state = 2*new_debounce_state + valForw;
+  valBack = digitalRead (BACK);
+  new_debounce_state = 2*new_debounce_state + valBack;
+  valZero = digitalRead (ZERO);
+  new_debounce_state = 2*new_debounce_state + valZero;
+  valReset = digitalRead (RESET);
+  new_debounce_state = 2*new_debounce_state + valReset;
+  for (int ib = 2; ib <= 7; ++ib)
+    {
+      valButton[ib-1] = digitalRead (buttons[ib-1]);
+      new_debounce_state = 2*new_debounce_state + valButton[ib-1];
+    }
+  valButton[7] = analogRead (buttons[7]);
+  new_debounce_state = 2*new_debounce_state + (valButton[7] > 1000 ? 1 : 0);
+
+  // If changed note the time
+  if (new_debounce_state != old_debounce_state)
+    lastDebounceTime = millis();
+
+  old_debounce_state = new_debounce_state;
+  
+  // Proceed only if no state change for a while
+  if ((millis() - lastDebounceTime) < debounceDelay)
+    return;
+
+  // Switches are stable so we proceed.
   
   doNewGate = false;
 
   // step forward
-  val = digitalRead (FORW);
-  if ((val == HIGH) && (old_valForw == LOW))
+  if ((valForw == HIGH) && (old_valForw == LOW))
     {
       doNewGate = true;
       stepForward = true;
@@ -160,11 +206,10 @@ void loop ()
 	  Serial.println("forward ");
 #endif
     }
-  old_valForw = val;
+  old_valForw = valForw;
   
   // step backward
-  val = digitalRead (BACK);
-  if ((val == HIGH) && (old_valBack == LOW))   
+  if ((valBack == HIGH) && (old_valBack == LOW))   
     {
       doNewGate = true;
       stepForward = false;
@@ -172,7 +217,7 @@ void loop ()
 	  Serial.println("backward ");
 #endif
     }
-  old_valBack = val;
+  old_valBack = valBack;
 
   // Execute patterns for either forward or backward step
   // Note that the following code allows for any pattern to be used with any
@@ -231,8 +276,7 @@ void loop ()
       }  
 
   // zero (mute)   
-  val = digitalRead (ZERO);
-  if ((val == HIGH) && (old_valZero == LOW))
+  if ((valZero == HIGH) && (old_valZero == LOW))
     {
       doNewGate = true;
       stepOn = 0;
@@ -240,11 +284,10 @@ void loop ()
 	  Serial.println("zero ");
 #endif
     }
-  old_valZero = val;
+  old_valZero = valZero;
   
   // reset (go back to step 1)
-  val = digitalRead (RESET);
-  if ((val == HIGH) && (old_valReset == LOW))   
+  if ((valReset == HIGH) && (old_valReset == LOW))   
     {
       doNewGate = true;
       stepOn = 1;
@@ -252,7 +295,7 @@ void loop ()
 	  Serial.println("reset ");
 #endif
     }
-  old_valReset = val;
+  old_valReset = valReset;
   
   // check the buttons, and actually we can start with button 2
   // because button 1 and reset produce the same signal and we already
@@ -260,8 +303,7 @@ void loop ()
   
   for (int ib = 2; ib <= 7; ++ib)
     {
-      val = digitalRead (buttons[ib-1]);
-      if (val == HIGH && old_valButton[ib-1] == LOW)
+      if (valButton[ib-1] == HIGH && old_valButton[ib-1] == LOW)
 	{
 	  doNewGate = true;
 	  stepOn = ib;
@@ -272,14 +314,13 @@ void loop ()
 	  Serial.println(ib);
 #endif
 	}
-      old_valButton[ib-1] = val;
+      old_valButton[ib-1] = valButton[ib-1];
     }
 
   // Pin A6 cannot be read as digital on the Nano so read
   // as analog and expect > 1000 when button pressed
   
-  val = analogRead (buttons[7]);
-  if (val > 1000 && old_valButton[7] < 1000)
+  if (valButton[7] >= 1000 && old_valButton[7] < 1000)
     {
       doNewGate = true;
       stepOn = 8;
@@ -289,7 +330,7 @@ void loop ()
 	  Serial.println(" button 8");
 #endif
     }
-  old_valButton[7] = val;
+  old_valButton[7] = valButton[7];
   
   // Now we've determined what to do, so if we need a new gate, do it
   
@@ -311,7 +352,6 @@ void loop ()
       delay (GATEOFFTIME);
    
       if (stepOn != 0)
-      if (old_stepOn != 0)
 	{
 #if DBG==1
 	  Serial.print("digitalWrite ");
