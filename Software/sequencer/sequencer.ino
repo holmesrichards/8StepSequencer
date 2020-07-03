@@ -4,7 +4,7 @@
 
 // CC0 1.0 Rich Holmes 2020
 
-#define DBG 1
+#define DBG 0
 
 // Hardware configuration
 
