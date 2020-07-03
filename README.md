@@ -1,7 +1,7 @@
 # 8StepSequencer
 8 step control voltage sequencer based on LMNC design, with a number of modifications
 
-See schematic for changes from the LMNC version. Main ones are:
+See [mods.md](https://github.com/holmesrichards/8StepSequencer/blob/master/mods.md) and schematic for changes from the LMNC version. Main ones are:
 
 * Added rotary switch to select sequence length or pattern
 * Added switches to turn off outputs for steps
