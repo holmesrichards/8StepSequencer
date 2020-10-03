@@ -8,29 +8,27 @@
 
 // Hardware configuration
 
-// Strange pin ordering due to boneheaded wiring mistakes
-
-#define STEP1     9
-#define STEP2     8
-#define STEP3     7
-#define STEP4     6
-#define STEP5     5
-#define STEP6     4
-#define STEP7     3
-#define STEP8     2
-#define RESET    10
-#define ZERO     11
-#define FORW     12
-#define BACK     13
-#define ROTARY   A7
-#define BUTTON1  10  // same as RESET (same action)
-#define BUTTON2  19  // must be read as analog
-#define BUTTON3  18
-#define BUTTON4  17
-#define BUTTON5  16
-#define BUTTON6  15
-#define BUTTON7  14
-#define BUTTON8  A6
+#define STEP1 2 // D2
+#define STEP2 3 // D3
+#define STEP3 4 // D4
+#define STEP4 5 // D5
+#define STEP5 6 // D6
+#define STEP6 7 // D7
+#define STEP7 8 // D8
+#define STEP8 9 // D9
+#define RESET 10 // D10
+#define ZERO 11 // D11
+#define FORW 12 // D12
+#define BACK 13 // D13
+#define ROTARY 14 // A0; read as analog
+#define BUTTON1 10 // D10; same as RESET (same action)
+#define BUTTON2 15 // A1; read as digital
+#define BUTTON3 16 // A2; read as digital
+#define BUTTON4 17 // A3; read as digital
+#define BUTTON5 18 // A4; read as digital
+#define BUTTON6 19 // A5; read as digital
+#define BUTTON7 A6 // A6; must be read as analog
+#define BUTTON8 A7 // A7; must be read as analog
 
 #define GATEOFFTIME 1
 
@@ -111,8 +109,7 @@ void setup ()
   pinMode (BUTTON3, INPUT);
   pinMode (BUTTON4, INPUT);
   pinMode (BUTTON5, INPUT);
-  pinMode (BUTTON6, INPUT);
-  pinMode (BUTTON7, INPUT);  // BUTTON8 and ROTARY will be read as analog
+  pinMode (BUTTON6, INPUT);  // BUTTON7, BUTTON8 and ROTARY will be read as analog
 }
 
 void loop ()
@@ -175,11 +172,12 @@ void loop ()
   new_debounce_state = 2*new_debounce_state + valZero;
   valReset = digitalRead (RESET);
   new_debounce_state = 2*new_debounce_state + valReset;
-  for (int ib = 2; ib <= 7; ++ib)
+  for (int ib = 2; ib <= 6; ++ib)
     {
       valButton[ib-1] = digitalRead (buttons[ib-1]);
       new_debounce_state = 2*new_debounce_state + valButton[ib-1];
     }
+  valButton[6] = analogRead (buttons[6]);
   valButton[7] = analogRead (buttons[7]);
   new_debounce_state = 2*new_debounce_state + (valButton[7] > 1000 ? 1 : 0);
 
@@ -309,7 +307,7 @@ void loop ()
   // because button 1 and reset produce the same signal and we already
   // checked that
   
-  for (int ib = 2; ib <= 7; ++ib)
+  for (int ib = 2; ib <= 6; ++ib)
     {
       if (valButton[ib-1] == HIGH && old_valButton[ib-1] == LOW)
 	{
@@ -325,8 +323,20 @@ void loop ()
       old_valButton[ib-1] = valButton[ib-1];
     }
 
-  // Pin A6 cannot be read as digital on the Nano so read
+  // Pins A6 and A7 cannot be read as digital on the Nano so read
   // as analog and expect > 1000 when button pressed
+  
+  if (valButton[6] >= 1000 && old_valButton[6] < 1000)
+    {
+      doNewGate = true;
+      stepOn = 7;
+#if DBG==1
+	  Serial.print("pin ");
+	  Serial.print(buttons[6]);
+	  Serial.println(" button 7");
+#endif
+    }
+  old_valButton[6] = valButton[6];
   
   if (valButton[7] >= 1000 && old_valButton[7] < 1000)
     {
