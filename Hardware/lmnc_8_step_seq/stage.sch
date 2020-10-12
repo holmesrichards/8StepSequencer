@@ -32,7 +32,7 @@ F 1 "R_POT" V 3034 2400 50  0000 C CNN
 F 2 "Potentiometer_THT:Potentiometer_Alps_RK163_Single_Horizontal" H 3150 2400 50  0001 C CNN
 F 3 "~" H 3150 2400 50  0001 C CNN
 	1    3150 2400
-	0    -1   1    0   
+	0    1    1    0   
 $EndComp
 $Comp
 L power:GND #PWR?
@@ -95,7 +95,7 @@ F 1 "R_POT" V 3034 3150 50  0000 C CNN
 F 2 "Potentiometer_THT:Potentiometer_Alps_RK163_Single_Horizontal" H 3150 3150 50  0001 C CNN
 F 3 "~" H 3150 3150 50  0001 C CNN
 	1    3150 3150
-	0    -1   1    0   
+	0    1    1    0   
 $EndComp
 $Comp
 L power:GND #PWR?
