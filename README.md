@@ -8,6 +8,6 @@ See [mods document](Docs/mods.md) and [schematic](Docs/lmnc_8_step_seq.pdf) for 
 * Added Zero gate input
 * Added "Reverse time" switch (which exchanges the roles of the Forward and Backward gate inputs)
 
-[Stripboard layout](Docs/lmnc_8_step_seq.pdf) reflects my intended ordering for D2..D13 and A0..A7, but not the ordering I actually ended up with, and which is coded for in the Arduino sketch initialization section.
+Also see [Stripboard layout](Docs/lmnc_8_step_seq.pdf).
 
 Initially tested and debugged 3 July 2020.
