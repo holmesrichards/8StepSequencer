@@ -8,6 +8,6 @@ See [mods document](Docs/mods.md) and [schematic](Docs/lmnc_8_step_seq.pdf) for 
 * Added Zero gate input
 * Added "Reverse time" switch (which exchanges the roles of the Forward and Backward gate inputs)
 
-Also see [Stripboard layout](Docs/lmnc_8_step_seq.png).
+Also see [Stripboard layout](Docs/lmnc_8step_strip.png).
 
 Initially tested and debugged 3 July 2020.
