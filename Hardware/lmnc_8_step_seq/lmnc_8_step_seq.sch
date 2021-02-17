@@ -206,9 +206,9 @@ Wire Wire Line
 Wire Wire Line
 	9025 2375 9025 3075
 Wire Wire Line
-	8350 4900 8200 4900
+	8350 5600 8200 5600
 Wire Wire Line
-	8350 5000 8200 5000
+	8350 5500 8200 5500
 NoConn ~ 8200 4300
 NoConn ~ 8200 4400
 NoConn ~ 8200 4700
@@ -719,17 +719,17 @@ Wire Wire Line
 Wire Wire Line
 	8850 1850 8850 1475
 Wire Wire Line
-	8200 5600 8350 5600
-Wire Wire Line
-	8200 5100 8350 5100
-Wire Wire Line
-	8200 5200 8350 5200
-Wire Wire Line
-	8200 5300 8350 5300
+	8200 4900 8350 4900
 Wire Wire Line
 	8200 5400 8350 5400
 Wire Wire Line
-	8200 5500 8350 5500
+	8200 5300 8350 5300
+Wire Wire Line
+	8200 5200 8350 5200
+Wire Wire Line
+	8200 5100 8350 5100
+Wire Wire Line
+	8200 5000 8350 5000
 Connection ~ 4150 6925
 $Comp
 L Device:R R25
@@ -1527,20 +1527,20 @@ Wire Notes Line
 	4225 5900 4225 3225
 Text Notes 6750 2800 0    100  ~ 0
 On stripboard
-Text Label 8350 5000 0    50   ~ 0
-BUTTON7
-Text Label 8350 5100 0    50   ~ 0
-BUTTON6
-Text Label 8350 5200 0    50   ~ 0
-BUTTON5
-Text Label 8350 5300 0    50   ~ 0
-BUTTON4
-Text Label 8350 5400 0    50   ~ 0
-BUTTON3
 Text Label 8350 5500 0    50   ~ 0
+BUTTON7
+Text Label 8350 5400 0    50   ~ 0
+BUTTON6
+Text Label 8350 5300 0    50   ~ 0
+BUTTON5
+Text Label 8350 5200 0    50   ~ 0
+BUTTON4
+Text Label 8350 5100 0    50   ~ 0
+BUTTON3
+Text Label 8350 5000 0    50   ~ 0
 BUTTON2
-Text Label 8350 4900 0    50   ~ 0
-BUTTON8
 Text Label 8350 5600 0    50   ~ 0
+BUTTON8
+Text Label 8350 4900 0    50   ~ 0
 ROTARY
 $EndSCHEMATC
