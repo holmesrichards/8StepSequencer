@@ -5,8 +5,10 @@
 // CC0 1.0 Rich Holmes 2020
 
 #define DBG 0
-
+ 
 // Hardware configuration
+
+// Strange pin ordering due to boneheaded wiring mistakes
 
 #define STEP1 2 // D2
 #define STEP2 3 // D3
@@ -50,6 +52,7 @@ unsigned int old_valBack = 0;
 unsigned int valButton[] = {0, 0, 0, 0, 0, 0, 0, 0};
 unsigned int old_valButton[] = {0, 0, 0, 0, 0, 0, 0, 0};
 unsigned int dbc_valButton[] = {0, 0, 0, 0, 0, 0, 0, 0};
+unsigned int btnsdn[] = {1, 2, 3, 4, 5, 6, 7, 8}; // list of steps in use
 
 bool changed = false;
 
@@ -89,7 +92,7 @@ unsigned int old_pattern = PAT_SINGLE;
 
 void setup ()
 {
-#if DBG==1
+#if DBG!=1
   Serial.begin(9600);  // for Arduino Uno / Pro Mini
 #endif
   pinMode (STEP1, OUTPUT);
@@ -104,17 +107,19 @@ void setup ()
   pinMode (BACK, INPUT);
   pinMode (RESET, INPUT);
   pinMode (ZERO, INPUT);
-  pinMode (BUTTON1, INPUT);
-  pinMode (BUTTON2, INPUT);
-  pinMode (BUTTON3, INPUT);
-  pinMode (BUTTON4, INPUT);
-  pinMode (BUTTON5, INPUT);
-  pinMode (BUTTON6, INPUT);  // BUTTON7, BUTTON8 and ROTARY will be read as analog
+  if (BUTTON1 <= 19) pinMode (BUTTON1, INPUT);
+  if (BUTTON2 <= 19) pinMode (BUTTON2, INPUT);
+  if (BUTTON3 <= 19) pinMode (BUTTON3, INPUT);
+  if (BUTTON4 <= 19) pinMode (BUTTON4, INPUT);
+  if (BUTTON5 <= 19) pinMode (BUTTON5, INPUT);
+  if (BUTTON6 <= 19) pinMode (BUTTON6, INPUT);
+  if (BUTTON7 <= 19) pinMode (BUTTON7, INPUT);
+  if (BUTTON7 <= 19) pinMode (BUTTON8, INPUT);
 }
 
 void loop ()
 {  
-// Check the rotary switch
+  // Check the rotary switch
     
   // Switch selects sequence length (# of stages used) and pattern
   //   
@@ -132,6 +137,7 @@ void loop ()
   // 11          8       Random
 
   valRot = analogRead (ROTARY);
+
   pattern = PAT_SINGLE;
   seq_length = 8;
   if (valRot > 973) pattern = PAT_RANDOM;
@@ -146,7 +152,98 @@ void loop ()
   else if (valRot > 51) seq_length = 3;
   else seq_length = 2; // we don't allow seq_length == 1, come on, be reasonable
 
-#if DBG==1
+  // Next read all buttons and toggles and check for a change
+
+  new_debounce_state = 0;
+  valForw = digitalRead (FORW);
+  new_debounce_state = 2*new_debounce_state + valForw;
+  valBack = digitalRead (BACK);
+  new_debounce_state = 2*new_debounce_state + valBack;
+  valZero = digitalRead (ZERO);
+  new_debounce_state = 2*new_debounce_state + valZero;
+  valReset = digitalRead (RESET);
+  new_debounce_state = 2*new_debounce_state + valReset;
+
+  // Read the buttons
+
+  for (int ib = 1; ib <= 8; ++ib)
+    {
+      if (buttons[ib-1] <= 19)
+	valButton[ib-1] = digitalRead (buttons[ib-1]);
+      else
+	valButton[ib-1] = analogRead (buttons[ib-1]) > 1000 ? HIGH : LOW;
+      new_debounce_state = 2*new_debounce_state + valButton[ib-1];
+    }
+
+  // If changed note the time
+  if (new_debounce_state != old_debounce_state)
+    {
+#if DBG==2
+      Serial.print("delta ");
+      Serial.println(millis()-lastDebounceTime);
+      lastDebounceTime = millis();
+#endif
+    }  
+  
+  old_debounce_state = new_debounce_state;
+  
+  // Proceed only if no state change for a while
+  delta = millis() - lastDebounceTime;
+  if (delta < debounceDelay)
+    return;
+#if DBG==2
+  Serial.println ("Debounced===============");
+#endif
+
+  // Switches are stable so we proceed.
+
+  doNewGate = false;
+
+  // See how many buttons are down — if > 1, they are the valid steps
+  // and seq_length is the number of buttons down.
+  // Otherwise use [1..seq_length].
+
+  unsigned nbutdn = 0;
+  bool btnchg = false;
+  for (int ib = 1; ib <= 8; ++ib)
+    {
+      if (valButton[ib-1] == HIGH)
+	{
+	  btnsdn[nbutdn] = ib;
+	  nbutdn += 1;
+	}
+      if (old_valButton[ib-1] != valButton[ib-1])
+	{
+	  btnchg = true;
+#if DBG==4
+	  Serial.print ("button change ");
+	  Serial.print (ib);
+	  Serial.print (" ");
+	  Serial.print (old_valButton[ib-1]);
+	  Serial.print (" to ");
+	  Serial.println (valButton[ib-1]);
+#endif
+	}
+    }
+  if (nbutdn > 1)
+    {
+      seq_length = nbutdn;
+      valReset = LOW; // disable reset if multiple buttons down
+      // because reset button is same as button 1
+    }
+  else
+    for (int is = 0; is < seq_length; ++is)
+      btnsdn[is] = is + 1;
+
+#if DBG==2
+  Serial.print("nbutdn == ");
+  Serial.println(nbutdn);
+  for (int is = 0; is < seq_length; ++is)
+    {
+      Serial.print(btnsdn[is]);
+      Serial.print(" ");
+    }
+  Serial.println();
   if (old_seq_length != seq_length)
     {
       Serial.print("seq_length ");
@@ -161,55 +258,13 @@ void loop ()
   old_pattern = pattern;
 #endif
 
-  // Next read all buttons and toggles and check for a change
-
-  new_debounce_state = 0;
-  valForw = digitalRead (FORW);
-  new_debounce_state = 2*new_debounce_state + valForw;
-  valBack = digitalRead (BACK);
-  new_debounce_state = 2*new_debounce_state + valBack;
-  valZero = digitalRead (ZERO);
-  new_debounce_state = 2*new_debounce_state + valZero;
-  valReset = digitalRead (RESET);
-  new_debounce_state = 2*new_debounce_state + valReset;
-  for (int ib = 2; ib <= 6; ++ib)
-    {
-      valButton[ib-1] = digitalRead (buttons[ib-1]);
-      new_debounce_state = 2*new_debounce_state + valButton[ib-1];
-    }
-  valButton[6] = analogRead (buttons[6]);
-  valButton[7] = analogRead (buttons[7]);
-  new_debounce_state = 2*new_debounce_state + (valButton[7] > 1000 ? 1 : 0);
-
-  // If changed note the time
-  if (new_debounce_state != old_debounce_state)
-  {
-#if DBG==1
-    Serial.print("delta ");
-    Serial.println(millis()-lastDebounceTime);
-    lastDebounceTime = millis();
-#endif
-  }  
-  
-
-  old_debounce_state = new_debounce_state;
-  
-  // Proceed only if no state change for a while
-  delta = millis() - lastDebounceTime;
-  if (delta < debounceDelay)
-    return;
-
-  // Switches are stable so we proceed.
-
-  doNewGate = false;
-
   // step forward
   if ((valForw == HIGH) && (old_valForw == LOW))
     {
       doNewGate = true;
       stepForward = true;
 #if DBG==1
-	  Serial.println("forward ");
+      Serial.println("forward ");
 #endif
     }
   old_valForw = valForw;
@@ -220,7 +275,7 @@ void loop ()
       doNewGate = true;
       stepForward = false;
 #if DBG==1
-	  Serial.println("backward ");
+      Serial.println("backward ");
 #endif
     }
   old_valBack = valBack;
@@ -287,85 +342,61 @@ void loop ()
       doNewGate = true;
       stepOn = 0;
 #if DBG==1
-	  Serial.println("zero ");
+      Serial.println("zero ");
 #endif
     }
   old_valZero = valZero;
   
   // reset (go back to step 1)
-  if ((valReset == HIGH) && (old_valReset == LOW))   
+  // Also do if holding down different buttons
+  if (btnchg || ((valReset == HIGH) && (old_valReset == LOW)))   
     {
       doNewGate = true;
       stepOn = 1;
 #if DBG==1
-	  Serial.println("reset ");
+      Serial.println("reset ");
 #endif
     }
   old_valReset = valReset;
-  
-  // check the buttons, and actually we can start with button 2
-  // because button 1 and reset produce the same signal and we already
-  // checked that
-  
-  for (int ib = 2; ib <= 6; ++ib)
-    {
-      if (valButton[ib-1] == HIGH && old_valButton[ib-1] == LOW)
-	{
-	  doNewGate = true;
-	  stepOn = ib;
-#if DBG==1
-	  Serial.print("pin ");
-	  Serial.print(buttons[ib-1]);
-	  Serial.print(" button ");
-	  Serial.println(ib);
-#endif
-	}
-      old_valButton[ib-1] = valButton[ib-1];
-    }
 
-  // Pins A6 and A7 cannot be read as digital on the Nano so read
-  // as analog and expect > 1000 when button pressed
+  // Handle single button presses
+
+  // Actually we can start with button 2 because button 1 and reset
+  // produce the same signal and we already checked that
+
+  // Pins 19 and 20 (A7 and A8) cannot be read as digital so are
+  // handled differently
   
-  if (valButton[6] >= 1000 && old_valButton[6] < 1000)
+  if (nbutdn == 1)
     {
-      doNewGate = true;
-      stepOn = 7;
-#if DBG==1
-	  Serial.print("pin ");
-	  Serial.print(buttons[6]);
-	  Serial.println(" button 7");
-#endif
+      for (int ib = 2; ib <= 8; ++ib)
+	{
+ 	  if (valButton[ib-1] == HIGH && old_valButton[ib-1] == LOW)
+	    {
+	      doNewGate = true;
+	      stepOn = ib;
+	    }
+	}
     }
-  old_valButton[6] = valButton[6];
   
-  if (valButton[7] >= 1000 && old_valButton[7] < 1000)
-    {
-      doNewGate = true;
-      stepOn = 8;
-#if DBG==1
-	  Serial.print("pin ");
-	  Serial.print(buttons[7]);
-	  Serial.println(" button 8");
-#endif
-    }
-  old_valButton[7] = valButton[7];
-  
+  for (int ib = 1; ib <= 8; ++ib)
+    old_valButton[ib-1] = valButton[ib-1];
+
   // Now we've determined what to do, so if we need a new gate, do it
-  
+
   if (doNewGate)
     {
       // Turn off the on step, then turn on the new on step
-
       if (old_stepOn != 0)
 	{
 #if DBG==1
 	  Serial.print("digitalWrite ");
 	  Serial.print(old_stepOn);
 	  Serial.print(" ");
-	  Serial.print(steps[old_stepOn-1]);
 	  Serial.println(" LOW");
 #endif
-	digitalWrite (steps[old_stepOn-1], LOW);
+	  digitalWrite (
+			old_stepOn, LOW);
 	}
       delay (GATEOFFTIME);
    
@@ -375,11 +406,13 @@ void loop ()
 	  Serial.print("digitalWrite ");
 	  Serial.print(stepOn);
 	  Serial.print(" ");
-	  Serial.print(steps[stepOn-1]);
+	  Serial.print(btnsdn[stepOn-1]);
+	  Serial.print(" ");
+	  Serial.print(steps[btnsdn[stepOn-1]-1]);
 	  Serial.println(" HIGH");
 #endif
-	  digitalWrite (steps[stepOn-1], HIGH);
+	  digitalWrite (steps[btnsdn[stepOn-1]-1], HIGH);
 	}
-      old_stepOn = stepOn;
+      old_stepOn = steps[btnsdn[stepOn-1]-1];
     }
 }
