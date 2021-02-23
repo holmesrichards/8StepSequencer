@@ -7,6 +7,7 @@ See [mods document](Docs/mods.md) and [schematic](Docs/lmnc_8_step_seq.pdf) for 
 * Added switches to turn off outputs for steps
 * Added Zero gate input
 * Added "Reverse time" switch (which exchanges the roles of the Forward and Backward gate inputs)
+* Software change allows you to hold down multiple buttons and only those steps will be used
 
 Also see [Stripboard layout](Docs/lmnc_8step_strip.png).
 

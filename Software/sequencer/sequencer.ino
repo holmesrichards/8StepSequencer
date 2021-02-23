@@ -92,7 +92,7 @@ unsigned int old_pattern = PAT_SINGLE;
 
 void setup ()
 {
-#if DBG!=1
+#if DBG!=0
   Serial.begin(9600);  // for Arduino Uno / Pro Mini
 #endif
   pinMode (STEP1, OUTPUT);

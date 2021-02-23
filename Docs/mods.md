@@ -11,3 +11,5 @@ Added zero gate, and switch to reverse forward/backward inputs.
 Enable/disable switch on each stage added.
 
 Arduino code rewritten to handle variable sequence lengths and patterns, and to read rotary switch, and generally to bring it more in line with my preferred coding style.
+
+Software change to add functionality: If two or more buttons are held down then those are the only stages the sequencer uses. For example hold buttons 1, 3, 5 and with rotary switch set to any of 2–8, forward clocks will produce pattern 1, 3, 5, 1, 3, 5...; with switch in INC position pattern will be 1, 3, 5, 5, 3, 1; and so on.
