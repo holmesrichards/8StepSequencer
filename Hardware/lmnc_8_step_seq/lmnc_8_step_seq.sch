@@ -685,7 +685,7 @@ F 3 "" H 5950 6325 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text Notes 3275 3175 0    50   ~ 0
-Added input protection Schottkys to ground , \nprobably not necessary (Arduino \nhas protection diodes) but I feel better with \nthem there.. Note LMNC version had pull \ndown resistors between series diodes and \njacks, probably not right.
+Schottkys protect against positive overvoltage.\nATMEGA has protection diodes but the \ndatasheet still says absolute maximum is\nVcc+0.5 V. I should have added a current\nlimiting resistor though.\n\nNote LMNC version had pull \ndown resistors between series diodes and \njacks, probably not right.\n
 Text Notes 5275 4675 0    50   ~ 0
 LMNC version has external \nL78L05_TO92 regulator \nconnected to VIN, which is \nwrong... either 12V to VIN \nor external regulator to +5V. \n
 Text Label 1850 1850 1    50   ~ 0
