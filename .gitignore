@@ -9,4 +9,10 @@ Narrow
 *~
 .gitignore-extra
 *.svg
+*.dsn
+*.kicad_prl
+*.kicad_pro
+*.rules
+*.ses
+\#*
 sequencer (rsh version)
